@@ -29,7 +29,7 @@ def get_image_features(img):
     img_tensor.unsqueeze_(0)
     img_variable = Variable(img_tensor)
 
-    return model(img_variable).data.numpy().squeeze()
+    return model(img_variable).cpu().data.numpy().squeeze()
 
 if __name__ == '__main__':
     model = models.resnet50(pretrained=True).cuda()
