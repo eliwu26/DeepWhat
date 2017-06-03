@@ -7,6 +7,11 @@ TRAIN_FILE = os.path.join(DATASETS_DIR, 'guesswhat.train.jsonl')
 VALID_FILE = os.path.join(DATASETS_DIR, 'guesswhat.valid.jsonl')
 TEST_FILE = os.path.join(DATASETS_DIR, 'guesswhat.test.jsonl')
 
+PROCESSED_DIR = '/processed'
+
+VOCAB_LIST = os.path.join(PROCESSED_DIR, 'vocab.txt')
+VOCAB_MAP = os.path.join(PROCESSED_DIR, 'vocab.pickle')
+
 def get_gw_file(split):
     if split == 'train':
         return TRAIN_FILE
