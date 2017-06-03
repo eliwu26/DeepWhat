@@ -12,6 +12,8 @@ PROCESSED_DIR = '/processed'
 VOCAB_LIST = os.path.join(PROCESSED_DIR, 'vocab.txt')
 VOCAB_MAP = os.path.join(PROCESSED_DIR, 'vocab.pickle')
 
+MAX_TOKENS_PER_QUESTION = 20
+
 def get_gw_file(split):
     if split == 'train':
         return TRAIN_FILE
@@ -20,5 +22,18 @@ def get_gw_file(split):
     elif split == 'test':
         return TEST_FILE
     
+def get_processed_file(model, split):
+    return os.path.join(PROCESSED_DIR, '{}_{}.pickle'.format(model, split))
+    
 def get_coco_file(filename):
     return os.path.join(COCO_DIR, filename)
+
+def get_answer_id(answer):
+    if answer == 'Yes':
+        return 0
+    elif answer == 'No':
+        return 1
+    elif answer == 'N/A':
+        return 2
+    else:
+        raise ValueError('invalid answer')

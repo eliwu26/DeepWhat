@@ -11,6 +11,7 @@ class VocabMap(object):
             self.token_to_id = pickle.load(f)
             self.id_to_token = {i: token for token, i in self.token_to_id.items()}
             self.unk = self.token_to_id['<unk>']
+            self.qmark = self.token_to_id['<?>']
             
     def get_id_from_token(self, token):
         return self.token_to_id.get(token, self.unk)
