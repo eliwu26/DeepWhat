@@ -1,6 +1,6 @@
 import os
 
-DATASETS_DIR = 'datasets'
+DATASETS_DIR = '/datasets'
 COCO_DIR = os.path.join(DATASETS_DIR, 'coco')
 
 TRAIN_FILE = os.path.join(DATASETS_DIR, 'guesswhat.train.jsonl')
