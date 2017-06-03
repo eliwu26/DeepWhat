@@ -22,8 +22,8 @@ def get_gw_file(split):
     elif split == 'test':
         return TEST_FILE
     
-def get_processed_file(model, split):
-    return os.path.join(PROCESSED_DIR, '{}_{}.pickle'.format(model, split))
+def get_processed_file(model, split, small):
+    return os.path.join(PROCESSED_DIR, '{}_{}{}.pickle'.format(model, split, '_small' if small else ''))
     
 def get_coco_file(filename):
     return os.path.join(COCO_DIR, filename)
