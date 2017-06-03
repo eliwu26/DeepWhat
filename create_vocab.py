@@ -3,6 +3,7 @@ import pickle
 from collections import Counter
 
 import data
+import vocab
 
 if __name__ == '__main__':
     counts = Counter()
@@ -17,9 +18,8 @@ if __name__ == '__main__':
             
             example = json.loads(line)
             for qa in example['qas']:
-                question = qa['question'].lower().replace('?', '').replace('/', ' ').replace('.', '').replace(',', '').replace('\\', '').replace('"', '').replace('(', '').replace(')', '').replace("'", '').replace('!', '').replace(':', '').replace(';', '').replace('$', '$ ').replace('%', '% ').replace('>', '').replace('<', '').strip()
-                question_tokens = question.split()
-                counts.update(question_tokens)
+                question = qa['question']
+                counts.update(vocab.get_tokens(question))
                 
     vocab = ['<unk>', '<?>', '<stop>']
     
