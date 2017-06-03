@@ -84,7 +84,7 @@ def make_dataset(split, small=False):
     np_answers = np.array(data_answers, dtype=int)
     
     with open(data.get_processed_file('oracle', split, small), 'wb') as f:
-        pickle.dump((np_tokens, np_question_lengths, np_features, np_categories, np_answers), f)
+        pickle.dump((np_tokens, np_question_lengths, np_features, np_categories, np_answers), f, protocol=4)
 
 if __name__ == '__main__':
     model = models.resnet50(pretrained=True).cuda()
