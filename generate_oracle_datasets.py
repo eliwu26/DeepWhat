@@ -25,14 +25,14 @@ def get_spatial_features(example, obj):
     return [x, y, x + bbox_width, y + bbox_height, x + bbox_width / 2, y + bbox_width / 2, bbox_width, bbox_height]
 
 def get_image_features(img):
-    img_tensor = preprocess(img)
+    img_tensor = preprocess(img).type(torch.cuda.FloatTensor)
     img_tensor.unsqueeze_(0)
     img_variable = Variable(img_tensor)
 
     return model(img_variable).data.numpy().squeeze()
 
 if __name__ == '__main__':
-    model = models.resnet50(pretrained=True)
+    model = models.resnet50(pretrained=True).cuda()
 
     # remove last fully-connected layer
     new_model = nn.Sequential(*list(model.children())[:-1])
