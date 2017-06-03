@@ -64,8 +64,11 @@ if __name__ == '__main__':
         with open(data.get_gw_file(split), 'r') as f:
             for line in f:
                 i += 1
-                if i % 1000 == 0:
+                if i % 100 == 0:
                     print(i)
+                    
+                if i > 1000:
+                    break
                 
                 example = json.loads(line)
                 object_id = example['object_id']
@@ -73,6 +76,8 @@ if __name__ == '__main__':
                 
                 img_path = data.get_coco_file(example['image']['file_name'])
                 img = Image.open(img_path)
+                if img.mode != 'RGB':
+                    img = img.convert('RGB')
                 
                 x, y, bbox_width, bbox_height = obj['bbox']
                 area = map(int, [x, y, x + bbox_width, y + bbox_height])
@@ -86,9 +91,10 @@ if __name__ == '__main__':
                     token_ids.append(vocab_map.qmark)
                     
                     np_token_ids = np.zeros(data.MAX_TOKENS_PER_QUESTION, dtype=int)
-                    np_token_ids[:len(token_ids)] = token_ids
+                    len_tokens = min(len(token_ids), data.MAX_TOKENS_PER_QUESTION)
+                    np_token_ids[:len_tokens] = token_ids[:len_tokens]
                     np_token_mask = np.zeros(data.MAX_TOKENS_PER_QUESTION, dtype=bool)
-                    np_token_mask[:len(token_ids)] = True
+                    np_token_mask[:len_tokens] = True
                     
                     data_tokens.append(np_token_ids)
                     data_token_masks.append(np_token_mask)
