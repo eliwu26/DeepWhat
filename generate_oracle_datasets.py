@@ -66,9 +66,6 @@ if __name__ == '__main__':
                 i += 1
                 if i % 100 == 0:
                     print(i)
-                    
-                if i > 1000:
-                    break
                 
                 example = json.loads(line)
                 object_id = example['object_id']
