@@ -33,7 +33,7 @@ if __name__ == '__main__':
         for word in vocab:
             print(word, file=f)
     
-    token_to_id = {token: i for i, token in enumerate(vocab)}
+    token_to_id = {token: i+1 for i, token in enumerate(vocab)}
     
     with open(data.VOCAB_MAP, 'wb') as f:
         pickle.dump(token_to_id, f)
