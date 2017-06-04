@@ -32,10 +32,10 @@ def check_accuracy(model, loader):
     model.eval() # Put the model in test mode (the opposite of model.train(), essentially)
     
     for tokens, q_lens, features, cats, answers in loader:
-        tokens_var = Variable(tokens.cuda(), volatile=False)
-        q_lens_var = Variable(q_lens.cuda(), volatile=False)
-        features_var = Variable(features.cuda(), volatile=False)
-        cats_var = Variable(cats.cuda(), volatile=False)
+        tokens_var = Variable(tokens.cuda(), volatile=True)
+        q_lens_var = Variable(q_lens.cuda(), volatile=True)
+        features_var = Variable(features.cuda(), volatile=True)
+        cats_var = Variable(cats.cuda(), volatile=True)
 
         scores = model(tokens_var, q_lens_var, features_var, cats_var)
         _, preds = scores.data.cpu().max(1)
