@@ -79,7 +79,7 @@ def make_dataset(split, small=False):
         
     np_tokens = np.vstack(data_tokens)
     np_question_lengths = np.array(data_question_lengths, dtype=int)
-    np_features = np.vstack(data_features)
+    np_features = np.vstack(data_features, dtype=np.float32)
     np_categories = np.array(data_categories, dtype=int)
     np_answers = np.array(data_answers, dtype=int)
     

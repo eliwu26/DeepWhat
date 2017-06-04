@@ -13,6 +13,7 @@ VOCAB_LIST = os.path.join(PROCESSED_DIR, 'vocab.txt')
 VOCAB_MAP = os.path.join(PROCESSED_DIR, 'vocab.pickle')
 
 MAX_TOKENS_PER_QUESTION = 20
+NUM_CATEGORIES = 91
 
 def get_gw_file(split):
     if split == 'train':
