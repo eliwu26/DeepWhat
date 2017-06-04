@@ -1,8 +1,11 @@
 import torch
 import torch.nn as nn
+from torch.autograd import Variable
 
 
 # https://github.com/pytorch/pytorch/pull/1375/files
+# with some fixes by Charles Lu
+
 def get_last_step_indices(lengths):
     """A helper function for :func:`get_last_step_tensor`.
 
@@ -16,7 +19,7 @@ def get_last_step_indices(lengths):
     """
     n_lengths = len(lengths)
     rev_lengths = lengths[::-1]
-    rev_lengths_sum = torch.LongTensor(rev_lengths).cumsum()
+    rev_lengths_sum = torch.LongTensor(rev_lengths).cumsum(dim=0)
     return torch.LongTensor([(n_lengths - i - 1) * length + rev_lengths_sum[i]
                              for i, length in enumerate(rev_lengths)])
 
