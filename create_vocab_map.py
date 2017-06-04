@@ -28,6 +28,7 @@ if __name__ == '__main__':
     print('Selected tokens: {}'.format(len(filtered_tokens)))
     
     vocab += filtered_tokens
+    vocab += ['<Yes>', '<No>', '<N/A>']
     
     with open(data.VOCAB_LIST, 'w') as f:
         for word in vocab:
