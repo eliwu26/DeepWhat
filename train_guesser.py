@@ -49,7 +49,6 @@ class CurriculumRandomSampler(Sampler):
     def __iter__(self):
         for num_objs in sorted(self.num_objs_to_idx):
             num_examples = len(self.num_objs_to_idx[num_objs])
-            print(num_objs, num_examples)
             
             perm = torch.randperm(num_examples)
             for p in perm:
@@ -108,7 +107,7 @@ def check_accuracy(model, loader):
 
         scores = model(dialogues_var, dialogue_lens, all_cats_var, all_spatial_var)
         _, preds = scores.data.cpu().max(1)
-        num_correct += (preds == answers).sum()
+        num_correct += (preds == torch.LongTensor(correct_objs)).sum()
         num_samples += preds.size(0)
     acc = float(num_correct) / num_samples
     tqdm.write('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
@@ -132,6 +131,8 @@ def train(model, num_epochs, print_every=1000):
             if t % print_every == 0:
                 tqdm.write('t = {}, loss = {:.4}'.format(t + 1, loss.data[0]))
 
+        tqdm.write('Getting accuracy on training set')
+        check_accuracy(model, loader_train)
         tqdm.write('Getting accuracy on validation set')
         check_accuracy(model, loader_valid)
         
@@ -147,5 +148,5 @@ loader_valid = get_data_loader('valid', small)
 loader_test = get_data_loader('valid', small)
 
 guesser_net = GuesserNet().cuda()
-train(guesser_net, num_epochs=15)
+train(guesser_net, num_epochs=100)
 check_accuracy(guesser_net, loader_valid)

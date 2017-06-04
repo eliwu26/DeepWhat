@@ -52,24 +52,24 @@ class GuesserNet(nn.Module):
         output, h_n = self.dialogue_encoder(embed_dialogue_packed)
         dialogue_encodings = packed_sequence_utils.get_last_step_tensor(
             output,
-            dialogue_lens
+            [l - 1 for l in dialogue_lens] # might be a bug but crashes without -1
         )
-        
-        print(dialogue_encodings.size())
         
         embed_categories = self.category_embedding(all_cats)
         
-        obj_scores = []
+        obj_scores_list = []
         for i in range(embed_categories.size(1)): # iterate over each object
             obj_features = torch.cat(
                 [embed_categories[:, i, :], all_spatial[:, i, :]],
                 1
             )
-            print(obj_features.size())
             
-            obj_scores.append(self.mlp(obj_features).dot(dialogue_encoding))
-        
-        
+            obj_embedding = self.mlp(obj_features)
+            obj_score = (obj_embedding * dialogue_encodings).sum(dim=1)
+            obj_scores_list.append(obj_score)
+            
+        obj_scores = torch.cat(obj_scores_list, 1)
+        return obj_scores
     
     def train_step(self, dialogues, dialogue_lens, all_cats, all_spatial, correct_objs):
         scores = self(dialogues, dialogue_lens, all_cats, all_spatial)
