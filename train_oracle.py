@@ -68,8 +68,11 @@ def train(model, num_epochs, print_every=1000):
 
         tqdm.write('Getting accuracy on validation set')
         check_accuracy(model, loader_valid)
-
-BATCH_SIZE = 64
+        
+    tqdm.write('Getting accuracy on training set')
+    check_accuracy(model, loader_train)
+    tqdm.write('Getting accuracy on test set')
+    check_accuracy(model, loader_test)
 
 def load_dataset(split, small):
     with open(data.get_processed_file('oracle', split, small), 'rb') as f:
@@ -82,6 +85,7 @@ def get_data_loader(split, small):
         shuffle=True,
         num_workers=1
     )
+
 
 small = False
 loader_train = get_data_loader('train', small)
