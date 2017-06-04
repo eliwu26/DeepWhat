@@ -38,3 +38,7 @@ class GuesserNet(nn.Module):
             nn.ReLU(),
             nn.Linear(64, hidden_dim)
         )
+        
+    def forward(self, dialogues, all_cats, all_spatial):
+        pass
+    

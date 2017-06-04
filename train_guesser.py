@@ -12,18 +12,20 @@ import data
 
 
 class GuesserDataset(Dataset):
-    def __init__(self, dialogues, all_objs, correct_objs):
-        assert len(dialogues) == len(all_objs) == len(correct_objs)
+    def __init__(self, dialogues, all_cats, all_spatial, correct_objs):
+        assert len(dialogues) == len(all_cats) == len(all_spatial) == len(correct_objs)
         
         self.dialogues = dialogues
-        self.all_objs = all_objs
+        self.all_cats = all_cats
+        self.all_spatial = all_spatial
         self.correct_objs = correct_objs
         
     def __len__(self):
         return len(self.dialogues)
     
     def __getitem__(self, i):
-        return (self.dialogues[i], self.all_objs[i], self.correct_objs[i])
+        return (self.dialogues[i], self.all_cats[i],
+                self.all_spatial[i], self.correct_objs[i])
 
 class CurriculumRandomSampler(Sampler):
     '''
@@ -72,6 +74,7 @@ def get_data_loader(split, small):
         sampler=CurriculumRandomSampler(dataset),
         collate_fn=lambda batch: batch
     )
+
 
 small = False
 loader_train = get_data_loader('train', small)

@@ -20,7 +20,8 @@ def get_spatial_features(example, obj):
 
 def make_dataset(split, small=False):
     data_dialogues = []
-    data_all_objs = []
+    data_all_spatial = []
+    data_all_cats = []
     data_correct_objs = []
     
     i = 0
@@ -38,8 +39,8 @@ def make_dataset(split, small=False):
             correct_obj_idx = [i for i, o in enumerate(example['objects'])
                                if o['id'] == correct_obj_id][0]
             
-            all_objs = [(o['category_id'], get_spatial_features(example, o))
-                        for o in example['objects']]
+            all_cats = [o['category_id'] for o in example['objects']]
+            all_spatial = [get_spatial_features(example, o) for o in example['objects']]
             
             dialogue_tokens = []
             for qa in example['qas']:
@@ -55,11 +56,13 @@ def make_dataset(split, small=False):
                 ))
                 
             data_dialogues.append(dialogue_tokens)
-            data_all_objs.append(all_objs)
+            data_all_cats.append(all_cats)
+            data_all_spatial.append(all_spatial)
             data_correct_objs.append(correct_obj_idx)
     
     with open(data.get_processed_file('guesser', split, small), 'wb') as f:
-        pickle.dump((data_dialogues, data_all_objs, data_correct_objs), f, protocol=4)
+        pickle.dump((data_dialogues, data_all_cats, data_all_spatial, data_correct_objs),
+                    f, protocol=4)
 
 if __name__ == '__main__':
     vocab_map = vocab.VocabMap()
