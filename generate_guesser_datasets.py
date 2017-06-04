@@ -2,12 +2,6 @@ import pickle
 import json
 
 import numpy as np
-from PIL import Image
-
-import torch
-import torch.nn as nn
-from torchvision import models, transforms
-from torch.autograd import Variable
 
 import data
 import vocab
@@ -22,72 +16,52 @@ def get_spatial_features(example, obj):
     bbox_width = 2 * bbox_width / img_width
     bbox_height = 2 * bbox_height / img_height
 
-    return [x, y, x + bbox_width, y + bbox_height, x + bbox_width / 2, y + bbox_width / 2, bbox_width, bbox_height]
+    return (x, y, x + bbox_width, y + bbox_height, x + bbox_width / 2, y + bbox_width / 2, bbox_width, bbox_height)
 
 def make_dataset(split, small=False):
-    data_tokens = []
-    data_question_lengths = []
-    data_features = [] # concatenation of image features, crop features, spatial information
-    data_categories = []
-    data_answers = []
+    data_dialogues = []
+    data_all_objs = []
+    data_correct_objs = []
     
     i = 0
     with open(data.get_gw_file(split), 'r') as f:
         for line in f:
             i += 1
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 print(i)
                 if small and i == 1000:
                     break
             
             example = json.loads(line)
-            object_id = example['object_id']
-            obj = [o for o in example['objects'] if o['id'] == object_id][0]
             
-            features = get_spatial_features(example, obj)
+            correct_obj_id = example['object_id']
+            correct_obj_idx = [i for i, o in enumerate(example['objects'])
+                               if o['id'] == correct_obj_id][0]
             
+            all_objs = [(o['category_id'], get_spatial_features(example, o))
+                        for o in example['objects']]
+            
+            dialogue_tokens = []
             for qa in example['qas']:
                 question_tokens = vocab.get_tokens(qa['question'])
-                token_ids = [vocab_map.get_id_from_token(token) for token in question_tokens]
-                token_ids.append(vocab_map.qmark)
+                dialogue_tokens.extend(
+                    vocab_map.get_id_from_token(token) for token in question_tokens
+                )
+                dialogue_tokens.append(vocab_map.qmark)
                 
-                np_token_ids = np.zeros(data.MAX_TOKENS_PER_QUESTION, dtype=int)
-                len_tokens = min(len(token_ids), data.MAX_TOKENS_PER_QUESTION)
-                np_token_ids[:len_tokens] = token_ids[:len_tokens]
+                assert qa['answer'] in ('Yes', 'No', 'N/A')
+                dialogue_tokens.append(vocab_map.get_id_from_token(
+                    '<{}>'.format(qa['answer'])
+                ))
                 
-                data_tokens.append(np_token_ids)
-                data_question_lengths.append(len_tokens)
-                data_features.append(features)
-                data_categories.append(obj['category_id'])
-                data_answers.append(data.get_answer_id(qa['answer']))
-        
-    np_tokens = np.vstack(data_tokens)
-    np_question_lengths = np.array(data_question_lengths, dtype=int)
-    np_features = np.vstack(data_features, dtype=np.float32)
-    np_categories = np.array(data_categories, dtype=int)
-    np_answers = np.array(data_answers, dtype=int)
+            data_dialogues.append(dialogue_tokens)
+            data_all_objs.append(all_objs)
+            data_correct_objs.append(correct_obj_idx)
     
-    with open(data.get_processed_file('oracle', split, small), 'wb') as f:
-        pickle.dump((np_tokens, np_question_lengths, np_features, np_categories, np_answers), f, protocol=4)
+    with open(data.get_processed_file('guesser', split, small), 'wb') as f:
+        pickle.dump((data_dialogues, data_all_objs, data_correct_objs), f, protocol=4)
 
 if __name__ == '__main__':
-    model = models.resnet50(pretrained=True).cuda()
-
-    # remove last fully-connected layer
-    new_model = nn.Sequential(*list(model.children())[:-1])
-    model = new_model
-
-    normalize = transforms.Normalize(
-       mean=[0.485, 0.456, 0.406],
-       std=[0.229, 0.224, 0.225]
-    )
-    preprocess = transforms.Compose([
-       transforms.Scale(256),
-       transforms.CenterCrop(224),
-       transforms.ToTensor(),
-       normalize
-    ])
-    
     vocab_map = vocab.VocabMap()
     
     for small in (True, False):
