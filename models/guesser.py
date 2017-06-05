@@ -13,7 +13,7 @@ vocab_size = vocab_map.vocab_size
 SPATIAL_SIZE = 8
 
 class GuesserNet(nn.Module):
-    def __init__(self, hidden_dim=128, token_embed_dim=64, category_embed_dim=16,
+    def __init__(self, hidden_dim=256, token_embed_dim=64, category_embed_dim=16,
                  vocab_size=vocab_size, num_categories=data.NUM_CATEGORIES):
         super(GuesserNet, self).__init__()
         
@@ -30,7 +30,7 @@ class GuesserNet(nn.Module):
         self.dialogue_encoder = nn.LSTM(
             input_size=token_embed_dim,
             hidden_size=hidden_dim,
-            num_layers=2,
+            num_layers=1,
             batch_first=True
         )
         
