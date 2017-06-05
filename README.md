@@ -1,2 +1,2 @@
 # DeepWhat?!
-CS231N Spring 2017 Final Project
+End-to-end models for task-oriented visual dialogue with reinforcement
