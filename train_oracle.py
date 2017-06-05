@@ -26,7 +26,7 @@ class OracleDataset(Dataset):
         return (self.tokens[i], self.question_lengths[i],
                 self.features[i], self.categories[i], self.answers[i])
 
-def check_accuracy(model, loader):
+def check_accuracy(model, descriptor, loader):
     num_correct = 0
     num_samples = 0
     model.eval() # Put the model in test mode (the opposite of model.train(), essentially)
@@ -42,17 +42,28 @@ def check_accuracy(model, loader):
         num_correct += (preds == answers).sum()
         num_samples += preds.size(0)
     acc = float(num_correct) / num_samples
-    tqdm.write('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+    log_print(descriptor,'Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+    return acc
 
-def train(model, num_epochs, print_every=1000):
-    tqdm.write('Getting accuracy on validation set')
-    check_accuracy(model, loader_valid)
-    
+def start_log(filename):
+    with open(data.get_log_file(filename), 'w') as f:
+        f.write("")
+        
+def log_print(filename, message):
+    tqdm.write(message)
+    with open(data.get_log_file(filename), 'a') as f:
+        f.write(message + '\n')
+        
+def train(model, descriptor, loader_valid_local, loader_train_local, loader_test_local, num_epochs, print_every=1000):
+    start_log(descriptor)
+    log_print(descriptor, 'Getting accuracy on validation set')
+    check_accuracy(model, descriptor, loader_valid_local)
+    current_max_val_acc = 0;
     for epoch in range(num_epochs):
-        tqdm.write('Starting epoch {} / {}'.format(epoch + 1, num_epochs))
+        log_print(descriptor, 'Starting epoch {} / {}'.format(epoch + 1, num_epochs))
         model.train()
 
-        for t, (tokens, q_lens, features, cats, answers) in tqdm(enumerate(loader_train)):
+        for t, (tokens, q_lens, features, cats, answers) in tqdm(enumerate(loader_train_local)):
             tokens_var = Variable(tokens.cuda(), requires_grad=False)
             q_lens_var = Variable(q_lens.cuda(), requires_grad=False)
             features_var = Variable(features.cuda(), requires_grad=False)
@@ -64,15 +75,18 @@ def train(model, num_epochs, print_every=1000):
             )
 
             if t % print_every == 0:
-                tqdm.write('t = {}, loss = {:.4}'.format(t + 1, loss.data[0]))
+                log_print(descriptor, 't = {}, loss = {:.4}'.format(t + 1, loss.data[0]))
 
-        tqdm.write('Getting accuracy on validation set')
-        check_accuracy(model, loader_valid)
+        log_print(descriptor, 'Getting accuracy on validation set')
+        accuracy = check_accuracy(model, descriptor, loader_valid_local)
+        if(accuracy > current_max_val_acc):
+            current_max_val_acc = accuracy
+            torch.save(model.state_dict(), data.get_saved_model(descriptor))
         
-    tqdm.write('Getting accuracy on training set')
-    check_accuracy(model, loader_train)
-    tqdm.write('Getting accuracy on test set')
-    check_accuracy(model, loader_test)
+    log_print(descriptor, 'Getting accuracy on training set')
+    check_accuracy(model, descriptor, loader_train_local)
+    log_print(descriptor, 'Getting accuracy on test set')
+    check_accuracy(model, descriptor, loader_test_local)
 
 def load_dataset(split, small):
     with open(data.get_processed_file('oracle', split, small), 'rb') as f:
@@ -86,12 +100,16 @@ def get_data_loader(split, small):
         num_workers=1
     )
 
+def main():
+    file_descriptor = 'GRU_3FC'
+    small = False
+    loader_train = get_data_loader('train', small)
+    loader_valid = get_data_loader('valid', small)
+    loader_test = get_data_loader('test', small)
 
-small = False
-loader_train = get_data_loader('train', small)
-loader_valid = get_data_loader('valid', small)
-loader_test = get_data_loader('valid', small)
-        
-oracle_net = OracleNet().cuda()
-train(oracle_net, num_epochs=15)
-check_accuracy(oracle_net, loader_valid)
+    oracle_net = OracleNet().cuda()
+    train(oracle_net, file_descriptor, loader_valid, loader_train, loader_test, num_epochs=15)
+    
+if __name__ == '__main__':
+    main()
+    

@@ -15,6 +15,15 @@ VOCAB_MAP = os.path.join(PROCESSED_DIR, 'vocab.pickle')
 MAX_TOKENS_PER_QUESTION = 20
 NUM_CATEGORIES = 91
 
+LOGS_DIR = 'logs'
+SAVED_MODELS_DIR = '/models'
+
+def get_saved_model(name):
+    return os.path.join(SAVED_MODELS_DIR, name + '.pytmodel')
+
+def get_log_file(name):
+    return os.path.join(LOGS_DIR, name + '.log')
+
 def get_gw_file(split):
     if split == 'train':
         return TRAIN_FILE
