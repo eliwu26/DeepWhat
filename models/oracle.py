@@ -33,7 +33,7 @@ class OracleNet(nn.Module):
         self.question_encoder = nn.GRU(
             input_size=token_embed_dim,
             hidden_size=question_hidden_dim,
-            num_layers=1,
+            num_layers=2,
             batch_first=True
         )
         
@@ -41,6 +41,8 @@ class OracleNet(nn.Module):
         self.fc1 = nn.Linear(fc1_in, 128)
         self.fc2 = nn.Linear(128, 64)
         self.fc3 = nn.Linear(64, 3)
+        #self.dout = nn.Dropout()
+        #self.fc2 = nn.Linear(128,3)
         
         self.optimizer = torch.optim.Adam(self.parameters())
         self.loss_fn = nn.CrossEntropyLoss()
@@ -55,8 +57,12 @@ class OracleNet(nn.Module):
 
         fc1_in = torch.cat([question_encodings, features, embed_category], 1)
         h1 = F.relu(self.fc1(fc1_in))
+        #hdrop = self.dout(h1)
         h2 = F.relu(self.fc2(h1))
         return self.fc3(h2)
+        #return self.fc2(h1)
+        #return self.fc2(hdrop)
+        #return self.fc3(hdrop)
         
     def train_step(self, tokens, q_lens, features, cats, answers):
         scores = self(tokens, q_lens, features, cats)

@@ -90,7 +90,16 @@ def make_vars(dialogues, all_cats, all_spatial, correct_objs, **kwargs):
     
     return (dialogues_var, all_cats_var, all_spatial_var, correct_objs_var, dialogue_lens)
 
-def check_accuracy(model, loader):
+def start_log(filename):
+    with open(data.get_log_file(filename), 'w') as f:
+        f.write("")
+        
+def log_print(filename, message):
+    tqdm.write(message)
+    with open(data.get_log_file(filename), 'a') as f:
+        f.write(message + '\n')
+        
+def check_accuracy(model, descriptor, loader):
     num_correct = 0
     num_samples = 0
     model.eval() # Put the model in test mode (the opposite of model.train(), essentially)
@@ -104,17 +113,18 @@ def check_accuracy(model, loader):
         num_correct += (preds == torch.LongTensor(correct_objs)).sum()
         num_samples += preds.size(0)
     acc = float(num_correct) / num_samples
-    tqdm.write('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+    log_print(descriptor, 'Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+    return acc
 
-def train(model, num_epochs, print_every=500):
-    tqdm.write('Getting accuracy on validation set')
-    check_accuracy(model, loader_valid)
-    
+def train(model, descriptor, loader_valid_local, loader_train_local, loader_test_local, num_epochs, print_every=500):
+    log_print(descriptor, 'Getting accuracy on validation set')
+    check_accuracy(model, descriptor, loader_valid_local)
+    current_max_val_acc = 0;
     for epoch in range(num_epochs):
-        tqdm.write('Starting epoch {} / {}'.format(epoch + 1, num_epochs))
+        log_print(descriptor, 'Starting epoch {} / {}'.format(epoch + 1, num_epochs))
         model.train()
 
-        for t, (dialogues, all_cats, all_spatial, correct_objs) in tqdm(enumerate(loader_train)):
+        for t, (dialogues, all_cats, all_spatial, correct_objs) in tqdm(enumerate(loader_train_local)):
             dialogues_var, all_cats_var, all_spatial_var, correct_objs_var, dialogue_lens = \
             make_vars(dialogues, all_cats, all_spatial, correct_objs, requires_grad=False)
 
@@ -123,22 +133,35 @@ def train(model, num_epochs, print_every=500):
             )
 
             if t % print_every == 0:
-                tqdm.write('t = {}, loss = {:.4}'.format(t + 1, loss.data[0]))
+                log_print(descriptor, 't = {}, loss = {:.4}'.format(t + 1, loss.data[0]))
 
-        tqdm.write('Getting accuracy on validation set')
-        check_accuracy(model, loader_valid)
-        
-    tqdm.write('Getting accuracy on training set')
-    check_accuracy(model, loader_train)
-    tqdm.write('Getting accuracy on test set')
-    check_accuracy(model, loader_test)
+        log_print(descriptor, 'Getting accuracy on validation set')
+        accuracy = check_accuracy(model, descriptor, loader_valid_local)
+        if accuracy > current_max_val_acc:
+            current_max_val_acc = accuracy
+            torch.save(model.state_dict(), data.get_saved_model(descriptor))
+    
+    best_model = GuesserNet().cuda()
+    best_model.load_state_dict(torch.load(data.get_saved_model(descriptor)))
+    
+    print(current_max_val_acc)
+    log_print(descriptor, 'Getting accuracy on training set')
+    check_accuracy(best_model, descriptor, loader_train_local)
+    log_print(descriptor, 'Getting accuracy on validation set')
+    check_accuracy(best_model, descriptor, loader_valid_local)
+    log_print(descriptor, 'Getting accuracy on test set')
+    check_accuracy(best_model, descriptor, loader_test_local)
 
+def main():
+    file_descriptor = 'guesser_gru2_fc2_cat16_h256_we64_longtrain'
+    small = False
+    loader_train = get_data_loader('train', small)
+    loader_valid = get_data_loader('valid', small)
+    loader_test = get_data_loader('test', small)
 
-small = False
-loader_train = get_data_loader('train', small)
-loader_valid = get_data_loader('valid', small)
-loader_test = get_data_loader('valid', small)
-
-guesser_net = GuesserNet().cuda()
-train(guesser_net, num_epochs=50)
-check_accuracy(guesser_net, loader_valid)
+    guesser_net = GuesserNet().cuda()
+    train(guesser_net, file_descriptor, loader_valid, loader_train, loader_test, num_epochs=50)
+    
+if __name__ == '__main__':
+    main()
+    

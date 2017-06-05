@@ -1,0 +1,333 @@
+Getting accuracy on validation set
+Got 28274 / 120318 correct (23.50)
+Starting epoch 1 / 25
+t = 1, loss = 1.1
+t = 1001, loss = 0.7134
+t = 2001, loss = 0.6269
+t = 3001, loss = 0.6253
+t = 4001, loss = 0.6427
+t = 5001, loss = 0.6415
+t = 6001, loss = 0.6685
+t = 7001, loss = 0.7155
+t = 8001, loss = 0.6448
+t = 9001, loss = 0.595
+Getting accuracy on validation set
+Got 84097 / 120318 correct (69.90)
+Starting epoch 2 / 25
+t = 1, loss = 0.6318
+t = 1001, loss = 0.6104
+t = 2001, loss = 0.717
+t = 3001, loss = 0.432
+t = 4001, loss = 0.5869
+t = 5001, loss = 0.6095
+t = 6001, loss = 0.5345
+t = 7001, loss = 0.6008
+t = 8001, loss = 0.486
+t = 9001, loss = 0.5387
+Getting accuracy on validation set
+Got 87445 / 120318 correct (72.68)
+Starting epoch 3 / 25
+t = 1, loss = 0.5958
+t = 1001, loss = 0.6373
+t = 2001, loss = 0.4403
+t = 3001, loss = 0.5332
+t = 4001, loss = 0.6619
+t = 5001, loss = 0.4818
+t = 6001, loss = 0.4949
+t = 7001, loss = 0.5127
+t = 8001, loss = 0.455
+t = 9001, loss = 0.717
+Getting accuracy on validation set
+Got 88865 / 120318 correct (73.86)
+Starting epoch 4 / 25
+t = 1, loss = 0.5863
+t = 1001, loss = 0.4454
+t = 2001, loss = 0.6195
+t = 3001, loss = 0.4302
+t = 4001, loss = 0.5197
+t = 5001, loss = 0.3476
+t = 6001, loss = 0.5174
+t = 7001, loss = 0.6407
+t = 8001, loss = 0.694
+t = 9001, loss = 0.3803
+Getting accuracy on validation set
+Got 87918 / 120318 correct (73.07)
+Starting epoch 5 / 25
+t = 1, loss = 0.4003
+t = 1001, loss = 0.6595
+t = 2001, loss = 0.4585
+t = 3001, loss = 0.3887
+t = 4001, loss = 0.6016
+t = 5001, loss = 0.5358
+t = 6001, loss = 0.4512
+t = 7001, loss = 0.5557
+t = 8001, loss = 0.588
+t = 9001, loss = 0.4752
+Getting accuracy on validation set
+Got 90174 / 120318 correct (74.95)
+Starting epoch 6 / 25
+t = 1, loss = 0.3319
+t = 1001, loss = 0.4932
+t = 2001, loss = 0.6355
+t = 3001, loss = 0.603
+t = 4001, loss = 0.6084
+t = 5001, loss = 0.4951
+t = 6001, loss = 0.5567
+t = 7001, loss = 0.3937
+t = 8001, loss = 0.5744
+t = 9001, loss = 0.5833
+Getting accuracy on validation set
+Got 90368 / 120318 correct (75.11)
+Starting epoch 7 / 25
+t = 1, loss = 0.3991
+t = 1001, loss = 0.5497
+t = 2001, loss = 0.5454
+t = 3001, loss = 0.5755
+t = 4001, loss = 0.4919
+t = 5001, loss = 0.5684
+t = 6001, loss = 0.5609
+t = 7001, loss = 0.4409
+t = 8001, loss = 0.4469
+t = 9001, loss = 0.4824
+Getting accuracy on validation set
+Got 89863 / 120318 correct (74.69)
+Starting epoch 8 / 25
+t = 1, loss = 0.4463
+t = 1001, loss = 0.4297
+t = 2001, loss = 0.4229
+t = 3001, loss = 0.3495
+t = 4001, loss = 0.3491
+t = 5001, loss = 0.6553
+t = 6001, loss = 0.5893
+t = 7001, loss = 0.5496
+t = 8001, loss = 0.5203
+t = 9001, loss = 0.4867
+Getting accuracy on validation set
+Got 90036 / 120318 correct (74.83)
+Starting epoch 9 / 25
+t = 1, loss = 0.4485
+t = 1001, loss = 0.3611
+t = 2001, loss = 0.5373
+t = 3001, loss = 0.3253
+t = 4001, loss = 0.4216
+t = 5001, loss = 0.4358
+t = 6001, loss = 0.3681
+t = 7001, loss = 0.4749
+t = 8001, loss = 0.6454
+t = 9001, loss = 0.4271
+Getting accuracy on validation set
+Got 90488 / 120318 correct (75.21)
+Starting epoch 10 / 25
+t = 1, loss = 0.5551
+t = 1001, loss = 0.6548
+t = 2001, loss = 0.4933
+t = 3001, loss = 0.4356
+t = 4001, loss = 0.4897
+t = 5001, loss = 0.6471
+t = 6001, loss = 0.3611
+t = 7001, loss = 0.4341
+t = 8001, loss = 0.6369
+t = 9001, loss = 0.5749
+Getting accuracy on validation set
+Got 90806 / 120318 correct (75.47)
+Starting epoch 11 / 25
+t = 1, loss = 0.4937
+t = 1001, loss = 0.3905
+t = 2001, loss = 0.4548
+t = 3001, loss = 0.5343
+t = 4001, loss = 0.5351
+t = 5001, loss = 0.5057
+t = 6001, loss = 0.5976
+t = 7001, loss = 0.5532
+t = 8001, loss = 0.3954
+t = 9001, loss = 0.4447
+Getting accuracy on validation set
+Got 90878 / 120318 correct (75.53)
+Starting epoch 12 / 25
+t = 1, loss = 0.6128
+t = 1001, loss = 0.5735
+t = 2001, loss = 0.4656
+t = 3001, loss = 0.524
+t = 4001, loss = 0.5313
+t = 5001, loss = 0.5901
+t = 6001, loss = 0.3342
+t = 7001, loss = 0.4142
+t = 8001, loss = 0.3827
+t = 9001, loss = 0.4691
+Getting accuracy on validation set
+Got 90307 / 120318 correct (75.06)
+Starting epoch 13 / 25
+t = 1, loss = 0.3977
+t = 1001, loss = 0.3995
+t = 2001, loss = 0.5628
+t = 3001, loss = 0.3517
+t = 4001, loss = 0.3983
+t = 5001, loss = 0.4985
+t = 6001, loss = 0.4627
+t = 7001, loss = 0.3451
+t = 8001, loss = 0.413
+t = 9001, loss = 0.4438
+Getting accuracy on validation set
+Got 90274 / 120318 correct (75.03)
+Starting epoch 14 / 25
+t = 1, loss = 0.3637
+t = 1001, loss = 0.5338
+t = 2001, loss = 0.503
+t = 3001, loss = 0.4193
+t = 4001, loss = 0.481
+t = 5001, loss = 0.6427
+t = 6001, loss = 0.6023
+t = 7001, loss = 0.4064
+t = 8001, loss = 0.5983
+t = 9001, loss = 0.3273
+Getting accuracy on validation set
+Got 90828 / 120318 correct (75.49)
+Starting epoch 15 / 25
+t = 1, loss = 0.6317
+t = 1001, loss = 0.4385
+t = 2001, loss = 0.3574
+t = 3001, loss = 0.4046
+t = 4001, loss = 0.5304
+t = 5001, loss = 0.3557
+t = 6001, loss = 0.4089
+t = 7001, loss = 0.3688
+t = 8001, loss = 0.6573
+t = 9001, loss = 0.507
+Getting accuracy on validation set
+Got 90771 / 120318 correct (75.44)
+Starting epoch 16 / 25
+t = 1, loss = 0.4444
+t = 1001, loss = 0.5501
+t = 2001, loss = 0.7078
+t = 3001, loss = 0.4774
+t = 4001, loss = 0.506
+t = 5001, loss = 0.4096
+t = 6001, loss = 0.4501
+t = 7001, loss = 0.3912
+t = 8001, loss = 0.3841
+t = 9001, loss = 0.5503
+Getting accuracy on validation set
+Got 90960 / 120318 correct (75.60)
+Starting epoch 17 / 25
+t = 1, loss = 0.3748
+t = 1001, loss = 0.5779
+t = 2001, loss = 0.6307
+t = 3001, loss = 0.4938
+t = 4001, loss = 0.4113
+t = 5001, loss = 0.5432
+t = 6001, loss = 0.3197
+t = 7001, loss = 0.4051
+t = 8001, loss = 0.6346
+t = 9001, loss = 0.5319
+Getting accuracy on validation set
+Got 90657 / 120318 correct (75.35)
+Starting epoch 18 / 25
+t = 1, loss = 0.5052
+t = 1001, loss = 0.4892
+t = 2001, loss = 0.4341
+t = 3001, loss = 0.464
+t = 4001, loss = 0.5083
+t = 5001, loss = 0.4846
+t = 6001, loss = 0.4342
+t = 7001, loss = 0.5064
+t = 8001, loss = 0.4824
+t = 9001, loss = 0.4122
+Getting accuracy on validation set
+Got 90943 / 120318 correct (75.59)
+Starting epoch 19 / 25
+t = 1, loss = 0.4453
+t = 1001, loss = 0.3981
+t = 2001, loss = 0.4499
+t = 3001, loss = 0.5509
+t = 4001, loss = 0.5061
+t = 5001, loss = 0.3516
+t = 6001, loss = 0.4734
+t = 7001, loss = 0.6775
+t = 8001, loss = 0.647
+t = 9001, loss = 0.3165
+Getting accuracy on validation set
+Got 90674 / 120318 correct (75.36)
+Starting epoch 20 / 25
+t = 1, loss = 0.5912
+t = 1001, loss = 0.4307
+t = 2001, loss = 0.4761
+t = 3001, loss = 0.4397
+t = 4001, loss = 0.525
+t = 5001, loss = 0.4006
+t = 6001, loss = 0.415
+t = 7001, loss = 0.4272
+t = 8001, loss = 0.5839
+t = 9001, loss = 0.5042
+Getting accuracy on validation set
+Got 91174 / 120318 correct (75.78)
+Starting epoch 21 / 25
+t = 1, loss = 0.486
+t = 1001, loss = 0.3973
+t = 2001, loss = 0.3744
+t = 3001, loss = 0.3992
+t = 4001, loss = 0.7136
+t = 5001, loss = 0.4589
+t = 6001, loss = 0.4683
+t = 7001, loss = 0.438
+t = 8001, loss = 0.494
+t = 9001, loss = 0.4293
+Getting accuracy on validation set
+Got 91159 / 120318 correct (75.77)
+Starting epoch 22 / 25
+t = 1, loss = 0.517
+t = 1001, loss = 0.3058
+t = 2001, loss = 0.5917
+t = 3001, loss = 0.5188
+t = 4001, loss = 0.3964
+t = 5001, loss = 0.4039
+t = 6001, loss = 0.4311
+t = 7001, loss = 0.5862
+t = 8001, loss = 0.4322
+t = 9001, loss = 0.5101
+Getting accuracy on validation set
+Got 91113 / 120318 correct (75.73)
+Starting epoch 23 / 25
+t = 1, loss = 0.5729
+t = 1001, loss = 0.3621
+t = 2001, loss = 0.4603
+t = 3001, loss = 0.5163
+t = 4001, loss = 0.5716
+t = 5001, loss = 0.4156
+t = 6001, loss = 0.4342
+t = 7001, loss = 0.5319
+t = 8001, loss = 0.4308
+t = 9001, loss = 0.3287
+Getting accuracy on validation set
+Got 90605 / 120318 correct (75.30)
+Starting epoch 24 / 25
+t = 1, loss = 0.5239
+t = 1001, loss = 0.4179
+t = 2001, loss = 0.4652
+t = 3001, loss = 0.4105
+t = 4001, loss = 0.3347
+t = 5001, loss = 0.5124
+t = 6001, loss = 0.5056
+t = 7001, loss = 0.5545
+t = 8001, loss = 0.5457
+t = 9001, loss = 0.5101
+Getting accuracy on validation set
+Got 90977 / 120318 correct (75.61)
+Starting epoch 25 / 25
+t = 1, loss = 0.3141
+t = 1001, loss = 0.4609
+t = 2001, loss = 0.4684
+t = 3001, loss = 0.4184
+t = 4001, loss = 0.5412
+t = 5001, loss = 0.4514
+t = 6001, loss = 0.4293
+t = 7001, loss = 0.4435
+t = 8001, loss = 0.4082
+t = 9001, loss = 0.4628
+Getting accuracy on validation set
+Got 90861 / 120318 correct (75.52)
+Getting accuracy on training set
+Got 463794 / 579633 correct (80.02)
+Getting accuracy on validation set
+Got 91174 / 120318 correct (75.78)
+Getting accuracy on test set
+Got 91987 / 121938 correct (75.44)

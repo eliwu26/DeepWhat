@@ -55,7 +55,6 @@ def log_print(filename, message):
         f.write(message + '\n')
         
 def train(model, descriptor, loader_valid_local, loader_train_local, loader_test_local, num_epochs, print_every=1000):
-    """
     start_log(descriptor)
     log_print(descriptor, 'Getting accuracy on validation set')
     check_accuracy(model, descriptor, loader_valid_local)
@@ -83,7 +82,7 @@ def train(model, descriptor, loader_valid_local, loader_train_local, loader_test
         if accuracy > current_max_val_acc:
             current_max_val_acc = accuracy
             torch.save(model.state_dict(), data.get_saved_model(descriptor))
-    """
+    
     best_model = OracleNet().cuda()
     best_model.load_state_dict(torch.load(data.get_saved_model(descriptor)))
     
@@ -107,7 +106,7 @@ def get_data_loader(split, small):
     )
 
 def main():
-    file_descriptor = 'oracle_gru1_fc3_cat32_h128_we64'
+    file_descriptor = 'oracle_gru2_fc3_cat32_h128_we64_dropout'
     small = False
     loader_train = get_data_loader('train', small)
     loader_valid = get_data_loader('valid', small)

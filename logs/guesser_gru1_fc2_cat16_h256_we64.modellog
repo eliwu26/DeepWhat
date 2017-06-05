@@ -1,0 +1,366 @@
+Getting accuracy on validation set
+Got 5120 / 24384 correct (21.00)
+Starting epoch 1 / 25
+t = 1, loss = 1.292
+t = 501, loss = 2.094
+t = 1001, loss = 1.375
+t = 1501, loss = 1.342
+Getting accuracy on validation set
+Got 6976 / 24384 correct (28.61)
+Starting epoch 2 / 25
+t = 1, loss = 1.896
+t = 501, loss = 0.879
+t = 1001, loss = 2.328
+t = 1501, loss = 1.212
+Getting accuracy on validation set
+Got 9792 / 24384 correct (40.16)
+Starting epoch 3 / 25
+t = 1, loss = 0.4502
+t = 501, loss = 0.2107
+t = 1001, loss = 0.3526
+t = 1501, loss = 1.429
+Getting accuracy on validation set
+Got 8000 / 24384 correct (32.81)
+Starting epoch 4 / 25
+t = 1, loss = 0.102
+t = 501, loss = 0.9756
+t = 1001, loss = 2.401
+t = 1501, loss = 1.386
+Getting accuracy on validation set
+Got 10240 / 24384 correct (41.99)
+Starting epoch 5 / 25
+t = 1, loss = 0.7719
+t = 501, loss = 1.604
+t = 1001, loss = 0.6654
+t = 1501, loss = 5.309
+Getting accuracy on validation set
+Got 11392 / 24384 correct (46.72)
+Starting epoch 6 / 25
+t = 1, loss = 0.8835
+t = 501, loss = 1.625
+t = 1001, loss = 1.182
+t = 1501, loss = 0.3717
+Getting accuracy on validation set
+Got 11456 / 24384 correct (46.98)
+Starting epoch 7 / 25
+t = 1, loss = 0.0001373
+t = 501, loss = 2.599
+t = 1001, loss = 0.1432
+t = 1501, loss = 1.619
+Getting accuracy on validation set
+Got 11840 / 24384 correct (48.56)
+Starting epoch 8 / 25
+t = 1, loss = 0.1352
+t = 501, loss = 0.3913
+t = 1001, loss = 1.304
+t = 1501, loss = 5.722e-06
+Getting accuracy on validation set
+Got 11264 / 24384 correct (46.19)
+Starting epoch 9 / 25
+t = 1, loss = 1.996
+t = 501, loss = 1.763
+t = 1001, loss = 1.774
+t = 1501, loss = 1.255
+Getting accuracy on validation set
+Got 11328 / 24384 correct (46.46)
+Starting epoch 10 / 25
+t = 1, loss = 0.8378
+t = 501, loss = 1.898
+t = 1001, loss = 0.9999
+t = 1501, loss = 1.142
+Getting accuracy on validation set
+Got 11968 / 24384 correct (49.08)
+Starting epoch 11 / 25
+t = 1, loss = 1.672
+t = 501, loss = 1.211
+t = 1001, loss = 0.7068
+t = 1501, loss = 6.027
+Getting accuracy on validation set
+Got 11456 / 24384 correct (46.98)
+Starting epoch 12 / 25
+t = 1, loss = 0.2039
+t = 501, loss = 0.7845
+t = 1001, loss = 0.005014
+t = 1501, loss = 0.7278
+Getting accuracy on validation set
+Got 12992 / 24384 correct (53.28)
+Starting epoch 13 / 25
+t = 1, loss = 0.08809
+t = 501, loss = 0.4563
+t = 1001, loss = 0.005096
+t = 1501, loss = 0.3288
+Getting accuracy on validation set
+Got 11968 / 24384 correct (49.08)
+Starting epoch 14 / 25
+t = 1, loss = 0.6466
+t = 501, loss = 1.365
+t = 1001, loss = 0.001339
+t = 1501, loss = 0.394
+Getting accuracy on validation set
+Got 12928 / 24384 correct (53.02)
+Starting epoch 15 / 25
+t = 1, loss = 0.3709
+t = 501, loss = 0.7397
+t = 1001, loss = 0.0001936
+t = 1501, loss = 2.575e-05
+Getting accuracy on validation set
+Got 11840 / 24384 correct (48.56)
+Starting epoch 16 / 25
+t = 1, loss = 0.4292
+t = 501, loss = 0.0005655
+t = 1001, loss = 1.189
+t = 1501, loss = 1.907e-06
+Getting accuracy on validation set
+Got 11584 / 24384 correct (47.51)
+Starting epoch 17 / 25
+t = 1, loss = 0.5493
+t = 501, loss = 0.9321
+t = 1001, loss = 2.374
+t = 1501, loss = 1.53
+Getting accuracy on validation set
+Got 11584 / 24384 correct (47.51)
+Starting epoch 18 / 25
+t = 1, loss = 0.009135
+t = 501, loss = 0.2067
+t = 1001, loss = 4.862
+t = 1501, loss = 0.1936
+Getting accuracy on validation set
+Got 11328 / 24384 correct (46.46)
+Starting epoch 19 / 25
+t = 1, loss = 0.9836
+t = 501, loss = 1.79
+t = 1001, loss = 0.00757
+t = 1501, loss = 0.3916
+Getting accuracy on validation set
+Got 11520 / 24384 correct (47.24)
+Starting epoch 20 / 25
+t = 1, loss = 0.9806
+t = 501, loss = 0.5027
+t = 1001, loss = 0.001097
+t = 1501, loss = 0.0001106
+Getting accuracy on validation set
+Got 12736 / 24384 correct (52.23)
+Starting epoch 21 / 25
+t = 1, loss = 0.3488
+t = 501, loss = 0.005938
+t = 1001, loss = 0.6903
+t = 1501, loss = 1.777
+Getting accuracy on validation set
+Got 12160 / 24384 correct (49.87)
+Starting epoch 22 / 25
+t = 1, loss = 0.93
+t = 501, loss = 2.497
+t = 1001, loss = 2.346
+t = 1501, loss = 0.6431
+Getting accuracy on validation set
+Got 12928 / 24384 correct (53.02)
+Starting epoch 23 / 25
+t = 1, loss = 0.0008421
+t = 501, loss = 0.4441
+t = 1001, loss = 0.4523
+t = 1501, loss = 1.464
+Getting accuracy on validation set
+Got 12160 / 24384 correct (49.87)
+Starting epoch 24 / 25
+t = 1, loss = 0.1179
+t = 501, loss = 0.8303
+t = 1001, loss = 0.07038
+t = 1501, loss = 2.933
+Getting accuracy on validation set
+Got 12864 / 24384 correct (52.76)
+Starting epoch 25 / 25
+t = 1, loss = 3.839
+t = 501, loss = 0.004323
+t = 1001, loss = 0.00156
+t = 1501, loss = 0.05189
+Getting accuracy on validation set
+Got 13952 / 24384 correct (57.22)
+Getting accuracy on training set
+Got 77248 / 113920 correct (67.81)
+Getting accuracy on validation set
+Got 12096 / 24384 correct (49.61)
+Getting accuracy on test set
+Got 11840 / 24320 correct (48.68)
+Getting accuracy on validation set
+Got 4928 / 24384 correct (20.21)
+Starting epoch 1 / 25
+t = 1, loss = 1.712
+t = 501, loss = 3.389
+t = 1001, loss = 1.948
+t = 1501, loss = 2.153
+Getting accuracy on validation set
+Got 6848 / 24384 correct (28.08)
+Starting epoch 2 / 25
+t = 1, loss = 2.59
+t = 501, loss = 1.579
+t = 1001, loss = 0.8473
+t = 1501, loss = 0.912
+Getting accuracy on validation set
+Got 9856 / 24384 correct (40.42)
+Starting epoch 3 / 25
+t = 1, loss = 0.9581
+t = 501, loss = 1.397
+t = 1001, loss = 0.7678
+t = 1501, loss = 1.11
+Getting accuracy on validation set
+Got 10624 / 24384 correct (43.57)
+Starting epoch 4 / 25
+t = 1, loss = 2.1
+t = 501, loss = 2.629
+t = 1001, loss = 2.152
+t = 1501, loss = 2.824
+Getting accuracy on validation set
+Got 11712 / 24384 correct (48.03)
+Starting epoch 5 / 25
+t = 1, loss = 0.2851
+t = 501, loss = 0.6599
+t = 1001, loss = 0.06474
+t = 1501, loss = 0.0005536
+Getting accuracy on validation set
+Got 11200 / 24384 correct (45.93)
+Starting epoch 6 / 25
+t = 1, loss = 1.338
+t = 501, loss = 0.01221
+t = 1001, loss = 0.0004382
+t = 1501, loss = 1.625
+Getting accuracy on validation set
+Got 11840 / 24384 correct (48.56)
+Starting epoch 7 / 25
+t = 1, loss = 1.561
+t = 501, loss = 2.285
+t = 1001, loss = 2.041
+t = 1501, loss = 0.008823
+Getting accuracy on validation set
+Got 12672 / 24384 correct (51.97)
+Starting epoch 8 / 25
+t = 1, loss = 1.987
+t = 501, loss = 0.584
+t = 1001, loss = 1.834
+t = 1501, loss = 0.002679
+Getting accuracy on validation set
+Got 11968 / 24384 correct (49.08)
+Starting epoch 9 / 25
+t = 1, loss = 1.217
+t = 501, loss = 2.119
+t = 1001, loss = 0.3135
+t = 1501, loss = 0.8093
+Getting accuracy on validation set
+Got 13120 / 24384 correct (53.81)
+Starting epoch 10 / 25
+t = 1, loss = 1.576
+t = 501, loss = 0.01191
+t = 1001, loss = 0.0002565
+t = 1501, loss = 1.911
+Getting accuracy on validation set
+Got 12416 / 24384 correct (50.92)
+Starting epoch 11 / 25
+t = 1, loss = 0.02957
+t = 501, loss = 0.4996
+t = 1001, loss = 1.419
+t = 1501, loss = 2.882
+Getting accuracy on validation set
+Got 11392 / 24384 correct (46.72)
+Starting epoch 12 / 25
+t = 1, loss = 0.05173
+t = 501, loss = 3.257
+t = 1001, loss = 2.219
+t = 1501, loss = 1.655
+Getting accuracy on validation set
+Got 10624 / 24384 correct (43.57)
+Starting epoch 13 / 25
+t = 1, loss = 2.008
+t = 501, loss = 0.0101
+t = 1001, loss = 0.02366
+t = 1501, loss = 0.1679
+Getting accuracy on validation set
+Got 12992 / 24384 correct (53.28)
+Starting epoch 14 / 25
+t = 1, loss = 0.5963
+t = 501, loss = 2.945
+t = 1001, loss = 3.196
+t = 1501, loss = 0.8538
+Getting accuracy on validation set
+Got 11840 / 24384 correct (48.56)
+Starting epoch 15 / 25
+t = 1, loss = 0.02044
+t = 501, loss = 0.75
+t = 1001, loss = 1.738
+t = 1501, loss = 1.007
+Getting accuracy on validation set
+Got 11840 / 24384 correct (48.56)
+Starting epoch 16 / 25
+t = 1, loss = 0.02855
+t = 501, loss = 0.2834
+t = 1001, loss = 4.768e-06
+t = 1501, loss = 2.464
+Getting accuracy on validation set
+Got 11776 / 24384 correct (48.29)
+Starting epoch 17 / 25
+t = 1, loss = 4.692
+t = 501, loss = 1.185
+t = 1001, loss = 1.699
+t = 1501, loss = 0.2446
+Getting accuracy on validation set
+Got 12416 / 24384 correct (50.92)
+Starting epoch 18 / 25
+t = 1, loss = 7.629e-06
+t = 501, loss = 0.03017
+t = 1001, loss = 1.907e-06
+t = 1501, loss = 0.03134
+Getting accuracy on validation set
+Got 11648 / 24384 correct (47.77)
+Starting epoch 19 / 25
+t = 1, loss = 0.7664
+t = 501, loss = 1.649
+t = 1001, loss = 0.0182
+t = 1501, loss = 2.299
+Getting accuracy on validation set
+Got 13440 / 24384 correct (55.12)
+Starting epoch 20 / 25
+t = 1, loss = 2.445
+t = 501, loss = 1.91
+t = 1001, loss = 0.0001678
+t = 1501, loss = 0.001985
+Getting accuracy on validation set
+Got 12480 / 24384 correct (51.18)
+Starting epoch 21 / 25
+t = 1, loss = 1.929
+t = 501, loss = 1.349
+t = 1001, loss = 1.314
+t = 1501, loss = 0.02228
+Getting accuracy on validation set
+Got 12864 / 24384 correct (52.76)
+Starting epoch 22 / 25
+t = 1, loss = 0.1586
+t = 501, loss = 0.0007753
+t = 1001, loss = 0.001373
+t = 1501, loss = 0.0006466
+Getting accuracy on validation set
+Got 12928 / 24384 correct (53.02)
+Starting epoch 23 / 25
+t = 1, loss = 0.003359
+t = 501, loss = 2.119
+t = 1001, loss = 0.8452
+t = 1501, loss = 0.003833
+Getting accuracy on validation set
+Got 11840 / 24384 correct (48.56)
+Starting epoch 24 / 25
+t = 1, loss = 0.007207
+t = 501, loss = 0.535
+t = 1001, loss = 0.02104
+t = 1501, loss = 0.7916
+Getting accuracy on validation set
+Got 12288 / 24384 correct (50.39)
+Starting epoch 25 / 25
+t = 1, loss = 0.002527
+t = 501, loss = 0.5456
+t = 1001, loss = 0.9045
+t = 1501, loss = 2.226
+Getting accuracy on validation set
+Got 11776 / 24384 correct (48.29)
+Getting accuracy on training set
+Got 73152 / 113920 correct (64.21)
+Getting accuracy on validation set
+Got 12544 / 24384 correct (51.44)
+Getting accuracy on test set
+Got 12544 / 24320 correct (51.58)
