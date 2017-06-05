@@ -22,7 +22,7 @@ def get_saved_model(name):
     return os.path.join(SAVED_MODELS_DIR, name + '.pytmodel')
 
 def get_log_file(name):
-    return os.path.join(LOGS_DIR, name + '.log')
+    return os.path.join(LOGS_DIR, name + '.modellog')
 
 def get_gw_file(split):
     if split == 'train':

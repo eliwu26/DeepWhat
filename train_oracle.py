@@ -55,6 +55,7 @@ def log_print(filename, message):
         f.write(message + '\n')
         
 def train(model, descriptor, loader_valid_local, loader_train_local, loader_test_local, num_epochs, print_every=1000):
+    """
     start_log(descriptor)
     log_print(descriptor, 'Getting accuracy on validation set')
     check_accuracy(model, descriptor, loader_valid_local)
@@ -79,14 +80,19 @@ def train(model, descriptor, loader_valid_local, loader_train_local, loader_test
 
         log_print(descriptor, 'Getting accuracy on validation set')
         accuracy = check_accuracy(model, descriptor, loader_valid_local)
-        if(accuracy > current_max_val_acc):
+        if accuracy > current_max_val_acc:
             current_max_val_acc = accuracy
             torch.save(model.state_dict(), data.get_saved_model(descriptor))
-        
+    """
+    best_model = OracleNet().cuda()
+    best_model.load_state_dict(torch.load(data.get_saved_model(descriptor)))
+    
     log_print(descriptor, 'Getting accuracy on training set')
-    check_accuracy(model, descriptor, loader_train_local)
+    check_accuracy(best_model, descriptor, loader_train_local)
+    log_print(descriptor, 'Getting accuracy on validation set')
+    accuracy = check_accuracy(best_model, descriptor, loader_valid_local)
     log_print(descriptor, 'Getting accuracy on test set')
-    check_accuracy(model, descriptor, loader_test_local)
+    check_accuracy(best_model, descriptor, loader_test_local)
 
 def load_dataset(split, small):
     with open(data.get_processed_file('oracle', split, small), 'rb') as f:
@@ -101,14 +107,14 @@ def get_data_loader(split, small):
     )
 
 def main():
-    file_descriptor = 'GRU_3FC'
+    file_descriptor = 'oracle_gru1_fc3_cat32_h128_we64'
     small = False
     loader_train = get_data_loader('train', small)
     loader_valid = get_data_loader('valid', small)
     loader_test = get_data_loader('test', small)
 
     oracle_net = OracleNet().cuda()
-    train(oracle_net, file_descriptor, loader_valid, loader_train, loader_test, num_epochs=15)
+    train(oracle_net, file_descriptor, loader_valid, loader_train, loader_test, num_epochs=25)
     
 if __name__ == '__main__':
     main()
