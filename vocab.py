@@ -16,6 +16,7 @@ class VocabMap(object):
         self.yes = self.token_to_id['<Yes>']
         self.no = self.token_to_id['<No>']
         self.na = self.token_to_id['<N/A>']
+        self.stop = self.token_to_id['<stop>']
         self.vocab_size = max(self.id_to_token) + 1
 
     def get_id_from_token(self, token):

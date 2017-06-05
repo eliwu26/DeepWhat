@@ -54,7 +54,7 @@ def make_dataset(split, small=False):
                 dialogue_tokens.append(vocab_map.get_id_from_token(
                     '<{}>'.format(qa['answer'])
                 ))
-                
+            dialogue_tokens.append(vocab_map.stop)
             data_dialogues.append(dialogue_tokens)
             data_all_cats.append(all_cats)
             data_all_spatial.append(all_spatial)
