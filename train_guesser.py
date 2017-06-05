@@ -27,7 +27,18 @@ class GuesserDataset(Dataset):
         return (self.dialogues[i], self.all_cats[i],
                 self.all_spatial[i], self.correct_objs[i])
 
-class GuesserDataLoader(object):
+class GuesserCurriculumDataLoader(object):
+    '''
+    Loads batches with examples with the same number of objects,
+    in increasing order of number of objects. 
+    
+    If there are fewer than batch_size remaining examples for the
+    current number of objects, the returned batch may be smaller. 
+    
+    Arguments:
+        data_source (GuesserDataset): dataset to sample from
+        batch_size
+    '''
     def __init__(self, dataset, batch_size=64):
         self.dataset = dataset
         self.batch_size = batch_size
@@ -63,7 +74,7 @@ def load_dataset(split, small):
     
 def get_data_loader(split, small):
     dataset = GuesserDataset(*load_dataset(split, small))
-    return GuesserDataLoader(dataset)
+    return GuesserCurriculumDataLoader(dataset)
 
 def make_vars(dialogues, all_cats, all_spatial, correct_objs, **kwargs):
     dialogue_lens = list(map(len, dialogues))
