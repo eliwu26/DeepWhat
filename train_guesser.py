@@ -4,8 +4,7 @@ import pickle
 import numpy as np
 import torch
 from torch.autograd import Variable
-from torch.utils.data import Dataset, DataLoader
-from torch.utils.data.sampler import Sampler
+from torch.utils.data import Dataset
 from tqdm import tqdm
 
 import data
@@ -28,59 +27,43 @@ class GuesserDataset(Dataset):
         return (self.dialogues[i], self.all_cats[i],
                 self.all_spatial[i], self.correct_objs[i])
 
-class CurriculumRandomSampler(Sampler):
-    '''
-    Samples elements in a GuesserDataset randomly, in increasing order of number
-    of objects. 
-    
-    Arguments:
-        data_source (GuesserDataset): dataset to sample from
-        batch_size: must match batch size for DataLoader for all samples in a batch
-                    to have same number of objects
-    '''
-    def __init__(self, data_source, batch_size=64):
-        self.data_source = data_source
-        self.batch_size = 64
+class GuesserDataLoader(object):
+    def __init__(self, dataset, batch_size=64):
+        self.dataset = dataset
+        self.batch_size = batch_size
         
         self.num_objs_to_idx = defaultdict(list)
-        for i, objs in enumerate(data_source.all_cats):
+        for i, objs in enumerate(dataset.all_cats):
             self.num_objs_to_idx[len(objs)].append(i)
-            
+    
+    def collate(self, batch):
+        batch.sort(
+            key=lambda x: len(x[0]), # dialogue length
+            reverse=True
+        )
+        return list(zip(*batch))
+    
     def __iter__(self):
         for num_objs in sorted(self.num_objs_to_idx):
             num_examples = len(self.num_objs_to_idx[num_objs])
             
             perm = torch.randperm(num_examples)
-            for p in perm:
-                yield self.num_objs_to_idx[num_objs][p]
-            
-            # return indices with same number of objects for the rest of the batch
-            for i in range(-num_examples % self.batch_size):
-                yield self.num_objs_to_idx[num_objs][perm[i % num_examples]]
+            for p in range(0, num_examples, self.batch_size):
+                yield self.collate([
+                    self.dataset[perm[p]]
+                    for i in range(p, p + self.batch_size)
+                ])
     
     def __len__(self):
-        return len(self.data_source)
-    
+        return len(self.dialogues)
+
 def load_dataset(split, small):
     with open(data.get_processed_file('guesser', split, small), 'rb') as f:
         return pickle.load(f)
-
-def collate_desc_dialogue_len(batch):
-    batch.sort(
-        key=lambda x: len(x[0]), # dialogue length
-        reverse=True
-    )
-    return list(zip(*batch))
     
 def get_data_loader(split, small):
     dataset = GuesserDataset(*load_dataset(split, small))
-    
-    return DataLoader(
-        dataset,
-        batch_size=64,
-        sampler=CurriculumRandomSampler(dataset),
-        collate_fn=collate_desc_dialogue_len
-    )
+    return GuesserDataLoader(dataset)
 
 def make_vars(dialogues, all_cats, all_spatial, correct_objs, **kwargs):
     dialogue_lens = list(map(len, dialogues))
@@ -112,7 +95,7 @@ def check_accuracy(model, loader):
     acc = float(num_correct) / num_samples
     tqdm.write('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
 
-def train(model, num_epochs, print_every=1000):
+def train(model, num_epochs, print_every=100):
     tqdm.write('Getting accuracy on validation set')
     check_accuracy(model, loader_valid)
     
@@ -131,8 +114,6 @@ def train(model, num_epochs, print_every=1000):
             if t % print_every == 0:
                 tqdm.write('t = {}, loss = {:.4}'.format(t + 1, loss.data[0]))
 
-        tqdm.write('Getting accuracy on training set')
-        check_accuracy(model, loader_train)
         tqdm.write('Getting accuracy on validation set')
         check_accuracy(model, loader_valid)
         
@@ -142,11 +123,11 @@ def train(model, num_epochs, print_every=1000):
     check_accuracy(model, loader_test)
 
 
-small = True
+small = False
 loader_train = get_data_loader('train', small)
 loader_valid = get_data_loader('valid', small)
 loader_test = get_data_loader('valid', small)
 
 guesser_net = GuesserNet().cuda()
-train(guesser_net, num_epochs=100)
+train(guesser_net, num_epochs=50)
 check_accuracy(guesser_net, loader_valid)

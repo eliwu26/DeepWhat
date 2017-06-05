@@ -27,10 +27,10 @@ class GuesserNet(nn.Module):
             embedding_dim=category_embed_dim
         )
         
-        self.dialogue_encoder = nn.GRU(
+        self.dialogue_encoder = nn.LSTM(
             input_size=token_embed_dim,
             hidden_size=hidden_dim,
-            num_layers=1,
+            num_layers=2,
             batch_first=True
         )
         
