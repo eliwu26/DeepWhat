@@ -106,7 +106,7 @@ def check_accuracy(model, loader):
     acc = float(num_correct) / num_samples
     tqdm.write('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
 
-def train(model, num_epochs, print_every=100):
+def train(model, num_epochs, print_every=500):
     tqdm.write('Getting accuracy on validation set')
     check_accuracy(model, loader_valid)
     
