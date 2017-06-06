@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 from tqdm import tqdm
 
 import data
-from logging_utils import start_log,log_print
+from logging_utils import start_log, log_print
 from models.guesser import GuesserNet
 
 

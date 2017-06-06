@@ -1,8 +1,10 @@
 import torch
+from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
 
 import vocab
+import data
 
 
 vocab_map = vocab.VocabMap()
@@ -29,13 +31,7 @@ class QuestionerNet(nn.Module):
         self.optimizer = torch.optim.Adam(self.parameters())
         self.loss_fn = nn.CrossEntropyLoss()
         
-    def forward(self, mode='beamsearch'):
-        '''
-        Eval time sample
-        '''
-        pass
-    
-    def train_step(self, features, in_seq, out_seq, seq_mask):
+    def forward(self, features, in_seq, h_0=None):
         in_embed = self.token_embedding(in_seq)
         
         features = features.unsqueeze(1)
@@ -43,7 +39,39 @@ class QuestionerNet(nn.Module):
         
         encoder_inputs = torch.cat([in_embed, features_repeated], 2)
         
-        logits, h_n = self.encoder(encoder_inputs)
+        logits, h_n = self.encoder(encoder_inputs, h_0)
+        return logits, h_n
+        
+    def sample(self, features, h_0=None, x_0=None, mode='greedy'):
+        '''
+        Eval time sample
+        
+        Parameters:
+            features: Resnet features
+            h_0: the hidden state returned at the end of the previous question,
+                 or None if we're starting a game
+            x_0: token ID for <start> or the previous answer, <Yes>/<No>/<N/A>
+            mode: 'greedy', 'random' for random sample, or 'beam' for beam search
+        '''
+        utterance = []
+        
+        x, h = x_0, h_0
+        
+        if x is None:
+            x = Variable(torch.LongTensor([[vocab_map.start]]).cuda(), volatile=True)
+        
+        while True:
+            logits, h = self(features, x, h_0=h)
+            probs = F.softmax(logits.view(1, -1))
+            prob, x = torch.max(probs, dim=1)
+            
+            token_id = int(x.data.cpu().numpy().squeeze())
+            utterance.append(token_id)
+            if token_id == vocab_map.qmark or token_id == vocab_map.stop or len(utterance) >= data.MAX_TOKENS_PER_QUESTION:
+                return utterance, h
+    
+    def train_step(self, features, in_seq, out_seq, seq_mask):
+        logits, h_n = self(features, in_seq)
         
         # see: https://github.com/pytorch/pytorch/issues/764
         # and https://gist.github.com/jihunchoi/f1434a77df9db1bb337417854b398df1

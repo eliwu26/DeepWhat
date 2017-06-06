@@ -4,7 +4,7 @@ from torch.utils.data import Dataset, DataLoader
 import pickle
 from tqdm import tqdm
 
-from logging_utils import start_log,log_print
+from logging_utils import start_log, log_print
 import data
 from models.oracle import OracleNet
 

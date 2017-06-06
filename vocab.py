@@ -67,3 +67,6 @@ class VocabTagger(object):
         dialogue_tokens.append(self.vocab_map.stop)
         
         return dialogue_tokens
+    
+    def get_question_tokens(self, question_ids):
+        return [self.vocab_map.get_token_from_id(i) for i in question_ids]
