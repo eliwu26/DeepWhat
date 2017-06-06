@@ -4,7 +4,7 @@ import json
 import numpy as np
 
 import data
-import vocab
+from vocab import VocabTagger
 
 # add functions to get processed features here
 def get_spatial_features(example, obj):
@@ -42,19 +42,8 @@ def make_dataset(split, small=False):
             all_cats = [o['category_id'] for o in example['objects']]
             all_spatial = [get_spatial_features(example, o) for o in example['objects']]
             
-            dialogue_tokens = []
-            for qa in example['qas']:
-                question_tokens = vocab.get_tokens(qa['question'])
-                dialogue_tokens.extend(
-                    vocab_map.get_id_from_token(token) for token in question_tokens
-                )
-                dialogue_tokens.append(vocab_map.qmark)
-                
-                assert qa['answer'] in ('Yes', 'No', 'N/A')
-                dialogue_tokens.append(vocab_map.get_id_from_token(
-                    '<{}>'.format(qa['answer'])
-                ))
-            dialogue_tokens.append(vocab_map.stop)
+            dialogue_tokens = vocab_tagger.get_dialogue_tokens(example['qas'])
+            
             data_dialogues.append(dialogue_tokens)
             data_all_cats.append(all_cats)
             data_all_spatial.append(all_spatial)
@@ -65,7 +54,7 @@ def make_dataset(split, small=False):
                     f, protocol=4)
 
 if __name__ == '__main__':
-    vocab_map = vocab.VocabMap()
+    vocab_tagger = VocabTagger()
     
     for small in (True, False):
         for split in ('train', 'valid', 'test'):
