@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 import data
-import vocab
+from vocab import VocabTagger
 from resnet_feature_extractor import ResnetFeatureExtractor
 
 # add functions to get processed features here
@@ -56,9 +56,7 @@ def make_dataset(split, small=False):
             ])
             
             for qa in example['qas']:
-                question_tokens = vocab.get_tokens(qa['question'])
-                token_ids = [vocab_map.get_id_from_token(token) for token in question_tokens]
-                token_ids.append(vocab_map.qmark)
+                token_ids = vocab_tagger.get_question_ids(qa['question'], qmark=True)
                 
                 np_token_ids = np.zeros(data.MAX_TOKENS_PER_QUESTION, dtype=int)
                 len_tokens = min(len(token_ids), data.MAX_TOKENS_PER_QUESTION)
@@ -82,7 +80,7 @@ def make_dataset(split, small=False):
 if __name__ == '__main__':
     resnet_feature_extractor = ResnetFeatureExtractor()
     
-    vocab_map = vocab.VocabMap()
+    vocab_tagger = VocabTagger()
     
     for small in (True, False):
         for split in ('train', 'valid', 'test'):

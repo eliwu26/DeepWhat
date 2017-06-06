@@ -37,9 +37,19 @@ def make_dataset(split, small=False):
             if img.mode != 'RGB':
                 img = img.convert('RGB')
             
-            dialogue_tokens = vocab_tagger.get_dialogue_tokens(example['qas'])
+            input_seq = [vocab_tagger.vocab_map.start]
+            output_seq = []
+            for qa in qas:
+                question_tokens = vocab_tagger.get_question_ids(qa['question'], qmark=False)
+                answer_token = vocab_tagger.get_answer_id(qa['answer'])
+                
+                input_seq.extend(question_tokens)
+                input_seq.append(answer_token)
+                output_seq.extend(question_tokens)
+                output_seq.append(vocab_tagger.vocab_map.qmark)
+            output_seq.append(vocab_tagger.vocab_map.stop)
             
-            if len(dialogue_tokens) < 102 or split != 'train':
+            if len(input_seq) <= 100 or split != 'train':
                 data_features.append(resnet_feature_extractor.get_image_features(img))
                 data_input_seqs.append(dialogue_tokens[:-1])
                 data_output_seqs.append(dialogue_tokens[1:])

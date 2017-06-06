@@ -2,7 +2,7 @@ import pickle
 
 import data
 
-def get_tokens(question):
+def tokenize(question):
     return question.lower().replace('?', '').replace('/', ' ').replace('.', '').replace(',', '').replace('\\', '').replace('"', '').replace('(', '').replace(')', '').replace("'", '').replace('!', '').replace(':', '').replace(';', '').replace('$', '$ ').replace('%', '% ').replace('>', '').replace('<', '').strip().split()
 
 class VocabMap(object):
@@ -30,27 +30,39 @@ class VocabMap(object):
 class VocabTagger(object):
     def __init__(self):
         self.vocab_map = VocabMap()
-        
-    def get_dialogue_tokens(self, qas):
+    
+    def get_answer_id(self, answer):
+        if answer == 'Yes':
+            return self.vocab_map.yes
+        elif answer == 'No':
+            return self.vocab_map.no
+        elif answer == 'N/A':
+            return self.vocab_map.na
+        else:
+            raise ValueError()
+    
+    def get_question_ids(self, question_tokens, qmark=False):
+        ids = [self.vocab_map.get_id_from_token(token)
+               for token in tokenize(question_tokens)]
+        if qmark:
+            ids.append(self.vocab_map.qmark)
+        return ids
+    
+    def get_dialogue_ids(self, qas):
+        '''
+        For use in generating guesser dataset.
+        '''
         dialogue_tokens = []
         
         dialogue_tokens.append(self.vocab_map.start)
         
         for qa in qas:
-            question_tokens = get_tokens(qa['question'])
             dialogue_tokens.extend(
-                self.vocab_map.get_id_from_token(token) for token in question_tokens
+                self.get_question_ids(qa['question'])
             )
             dialogue_tokens.append(self.vocab_map.qmark)
 
-            if qa['answer'] == 'Yes':
-                dialogue_tokens.append(self.vocab_map.yes)
-            elif qa['answer'] == 'No':
-                dialogue_tokens.append(self.vocab_map.no)
-            elif qa['answer'] == 'N/A':
-                dialogue_tokens.append(self.vocab_map.na)
-            else:
-                raise ValueError()
+        dialogue_tokens.append(self.get_answer_id(qa['answer']))
          
         dialogue_tokens.append(self.vocab_map.stop)
         

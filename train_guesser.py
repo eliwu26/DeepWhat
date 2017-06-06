@@ -93,7 +93,7 @@ def make_vars(dialogues, all_cats, all_spatial, correct_objs, **kwargs):
 def start_log(filename):
     with open(data.get_log_file(filename), 'w') as f:
         f.write("")
-        
+
 def log_print(filename, message):
     tqdm.write(message)
     with open(data.get_log_file(filename), 'a') as f:

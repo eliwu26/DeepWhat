@@ -42,7 +42,7 @@ def make_dataset(split, small=False):
             all_cats = [o['category_id'] for o in example['objects']]
             all_spatial = [get_spatial_features(example, o) for o in example['objects']]
             
-            dialogue_tokens = vocab_tagger.get_dialogue_tokens(example['qas'])
+            dialogue_tokens = vocab_tagger.get_dialogue_ids(example['qas'])
             
             data_dialogues.append(dialogue_tokens)
             data_all_cats.append(all_cats)
