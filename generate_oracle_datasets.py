@@ -4,13 +4,9 @@ import json
 import numpy as np
 from PIL import Image
 
-import torch
-import torch.nn as nn
-from torchvision import models, transforms
-from torch.autograd import Variable
-
 import data
 import vocab
+from resnet_feature_extractor import ResnetFeatureExtractor
 
 # add functions to get processed features here
 def get_spatial_features(example, obj):
@@ -23,13 +19,6 @@ def get_spatial_features(example, obj):
     bbox_height = 2 * bbox_height / img_height
 
     return [x, y, x + bbox_width, y + bbox_height, x + bbox_width / 2, y + bbox_width / 2, bbox_width, bbox_height]
-
-def get_image_features(img):
-    img_tensor = preprocess(img).type(torch.cuda.FloatTensor)
-    img_tensor.unsqueeze_(0)
-    img_variable = Variable(img_tensor)
-
-    return model(img_variable).cpu().data.numpy().squeeze()
 
 def make_dataset(split, small=False):
     data_tokens = []
@@ -60,7 +49,11 @@ def make_dataset(split, small=False):
             area = map(int, [x, y, x + bbox_width, y + bbox_height])
             img_crop = img.crop(area)
             
-            features = np.concatenate([get_image_features(img), get_image_features(img_crop), get_spatial_features(example, obj)])
+            features = np.concatenate([
+                resnet_feature_extractor.get_image_features(img),
+                resnet_feature_extractor.get_image_features(img_crop),
+                get_spatial_features(example, obj)
+            ])
             
             for qa in example['qas']:
                 question_tokens = vocab.get_tokens(qa['question'])
@@ -87,22 +80,7 @@ def make_dataset(split, small=False):
         pickle.dump((np_tokens, np_question_lengths, np_features, np_categories, np_answers), f, protocol=4)
 
 if __name__ == '__main__':
-    model = models.resnet50(pretrained=True).cuda()
-
-    # remove last fully-connected layer
-    new_model = nn.Sequential(*list(model.children())[:-1])
-    model = new_model
-
-    normalize = transforms.Normalize(
-       mean=[0.485, 0.456, 0.406],
-       std=[0.229, 0.224, 0.225]
-    )
-    preprocess = transforms.Compose([
-       transforms.Scale(256),
-       transforms.CenterCrop(224),
-       transforms.ToTensor(),
-       normalize
-    ])
+    resnet_feature_extractor = ResnetFeatureExtractor()
     
     vocab_map = vocab.VocabMap()
     
