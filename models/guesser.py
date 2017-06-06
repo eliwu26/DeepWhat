@@ -32,8 +32,8 @@ class GuesserNet(nn.Module):
             input_size=token_embed_dim,
             hidden_size=hidden_dim,
             #num_layers=1,
-            #num_layers=2,
-            num_layers=3,
+            num_layers=2,
+            #num_layers=3,
             batch_first=True
         )
         
