@@ -21,7 +21,7 @@ if __name__ == '__main__':
                 question = qa['question']
                 counts.update(vocab.get_tokens(question))
                 
-    vocab = ['<unk>', '<?>', '<stop>']
+    vocab = ['<start>', '<unk>', '<?>', '<stop>']
     
     print('Total tokens: {}'.format(len(counts)))
     filtered_tokens = [token for token, count in counts.most_common() if count >= 10]
@@ -29,7 +29,6 @@ if __name__ == '__main__':
     
     vocab += filtered_tokens
     vocab += ['<Yes>', '<No>', '<N/A>']
-    vocab += ['<start>']
     
     with open(data.VOCAB_LIST, 'w') as f:
         for word in vocab:
