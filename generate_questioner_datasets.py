@@ -38,9 +38,10 @@ def make_dataset(split, small=False):
             
             dialogue_tokens = vocab_tagger.get_dialogue_tokens(example['qas'])
             
-            data_features.append(resnet_feature_extractor.get_image_features(img))
-            data_input_seqs.append(dialogue_tokens[:-1])
-            data_output_seqs.append(dialogue_tokens[1:])
+            if len(dialogue_tokens) < 102 or split != 'train':
+                data_features.append(resnet_feature_extractor.get_image_features(img))
+                data_input_seqs.append(dialogue_tokens[:-1])
+                data_output_seqs.append(dialogue_tokens[1:])
     
     np_features = np.array(data_features)
     np_input_seqs = make_padded_ndarray(data_input_seqs)
