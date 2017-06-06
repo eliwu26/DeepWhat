@@ -8,6 +8,7 @@ from torch.utils.data import Dataset
 from tqdm import tqdm
 
 import data
+from logging_utils import start_log,log_print
 from models.guesser import GuesserNet
 
 
@@ -89,15 +90,6 @@ def make_vars(dialogues, all_cats, all_spatial, correct_objs, **kwargs):
     correct_objs_var = Variable(torch.LongTensor(correct_objs).cuda(), **kwargs)
     
     return (dialogues_var, all_cats_var, all_spatial_var, correct_objs_var, dialogue_lens)
-
-def start_log(filename):
-    with open(data.get_log_file(filename), 'w') as f:
-        f.write("")
-        
-def log_print(filename, message):
-    tqdm.write(message)
-    with open(data.get_log_file(filename), 'a') as f:
-        f.write(message + '\n')
         
 def check_accuracy(model, descriptor, loader):
     num_correct = 0
@@ -140,7 +132,8 @@ def train(model, descriptor, loader_valid_local, loader_train_local, loader_test
         if accuracy > current_max_val_acc:
             current_max_val_acc = accuracy
             torch.save(model.state_dict(), data.get_saved_model(descriptor))
-    
+        print(current_max_val_acc)
+        
     best_model = GuesserNet().cuda()
     best_model.load_state_dict(torch.load(data.get_saved_model(descriptor)))
     
@@ -153,14 +146,14 @@ def train(model, descriptor, loader_valid_local, loader_train_local, loader_test
     check_accuracy(best_model, descriptor, loader_test_local)
 
 def main():
-    file_descriptor = 'guesser_gru2_fc2_cat16_h256_we64_longtrain'
+    file_descriptor = 'guesser_gru3_fc2_cat16_h256_we64_longtrain'
     small = False
     loader_train = get_data_loader('train', small)
     loader_valid = get_data_loader('valid', small)
     loader_test = get_data_loader('test', small)
 
     guesser_net = GuesserNet().cuda()
-    train(guesser_net, file_descriptor, loader_valid, loader_train, loader_test, num_epochs=50)
+    train(guesser_net, file_descriptor, loader_valid, loader_train, loader_test, num_epochs=75)
     
 if __name__ == '__main__':
     main()

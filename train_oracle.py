@@ -4,6 +4,7 @@ from torch.utils.data import Dataset, DataLoader
 import pickle
 from tqdm import tqdm
 
+from logging_utils import start_log,log_print
 import data
 from models.oracle import OracleNet
 
@@ -44,15 +45,6 @@ def check_accuracy(model, descriptor, loader):
     acc = float(num_correct) / num_samples
     log_print(descriptor,'Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
     return acc
-
-def start_log(filename):
-    with open(data.get_log_file(filename), 'w') as f:
-        f.write("")
-        
-def log_print(filename, message):
-    tqdm.write(message)
-    with open(data.get_log_file(filename), 'a') as f:
-        f.write(message + '\n')
         
 def train(model, descriptor, loader_valid_local, loader_train_local, loader_test_local, num_epochs, print_every=1000):
     start_log(descriptor)
@@ -106,7 +98,7 @@ def get_data_loader(split, small):
     )
 
 def main():
-    file_descriptor = 'oracle_gru2_fc3_cat32_h128_we64_dropout'
+    file_descriptor = 'oracle_gru2_fc3_cat32_h128_we64'
     small = False
     loader_train = get_data_loader('train', small)
     loader_valid = get_data_loader('valid', small)
