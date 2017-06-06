@@ -53,7 +53,7 @@ def get_data_loader(split, small):
         num_workers=1
     )
 
-def train(model, descriptor, loader_valid, loader_train, loader_test, num_epochs, print_every=1):
+def train(model, descriptor, loader_train, num_epochs, print_every=10):
     for epoch in range(num_epochs):
         tqdm.write('Starting epoch {} / {}'.format(epoch + 1, num_epochs))
         model.train()
@@ -73,13 +73,13 @@ def train(model, descriptor, loader_valid, loader_train, loader_test, num_epochs
 
 def main():
     file_descriptor = 'questioner'
-    small = True
+    small = False
     loader_train = get_data_loader('train', small)
-    loader_valid = get_data_loader('valid', small)
-    loader_test = get_data_loader('test', small)
+    # loader_valid = get_data_loader('valid', small)
+    # loader_test = get_data_loader('test', small)
 
     questioner_net = QuestionerNet().cuda()
-    train(questioner_net, file_descriptor, loader_valid, loader_train, loader_test, num_epochs=25)
+    train(questioner_net, file_descriptor, loader_train, num_epochs=25)
 
 if __name__ == '__main__':
     main()

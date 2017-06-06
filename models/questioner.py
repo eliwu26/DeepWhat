@@ -22,7 +22,7 @@ class QuestionerNet(nn.Module):
         self.encoder = nn.LSTM(
             input_size=RESNET_FEATURE_SIZE + token_embed_dim,
             hidden_size=vocab_size,
-            num_layers=2,
+            num_layers=1,
             batch_first=True
         )
         
