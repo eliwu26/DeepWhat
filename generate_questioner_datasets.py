@@ -39,7 +39,7 @@ def make_dataset(split, small=False):
             
             input_seq = [vocab_tagger.vocab_map.start]
             output_seq = []
-            for qa in qas:
+            for qa in example['qas']:
                 question_tokens = vocab_tagger.get_question_ids(qa['question'], qmark=False)
                 answer_token = vocab_tagger.get_answer_id(qa['answer'])
                 
@@ -51,9 +51,9 @@ def make_dataset(split, small=False):
             
             if len(input_seq) <= 100 or split != 'train':
                 data_features.append(resnet_feature_extractor.get_image_features(img))
-                data_input_seqs.append(dialogue_tokens[:-1])
-                data_output_seqs.append(dialogue_tokens[1:])
-                data_seq_lens.append(len(dialogue_tokens) - 1)
+                data_input_seqs.append(input_seq)
+                data_output_seqs.append(output_seq)
+                data_seq_lens.append(len(input_seq))
     
     np_features = np.array(data_features)
     np_input_seqs = make_padded_ndarray(data_input_seqs)
