@@ -20,6 +20,7 @@ def make_dataset(split, small=False):
     data_features = [] # resnet features
     data_input_seqs = []
     data_output_seqs = []
+    data_seq_lens = []
     
     i = 0
     with open(data.get_gw_file(split), 'r') as f:
@@ -42,13 +43,16 @@ def make_dataset(split, small=False):
                 data_features.append(resnet_feature_extractor.get_image_features(img))
                 data_input_seqs.append(dialogue_tokens[:-1])
                 data_output_seqs.append(dialogue_tokens[1:])
+                data_seq_lens.append(len(dialogue_tokens) - 1)
     
     np_features = np.array(data_features)
     np_input_seqs = make_padded_ndarray(data_input_seqs)
     np_output_seqs = make_padded_ndarray(data_output_seqs)
+    np_seq_lens = np.array(data_seq_lens)
     
     with open(data.get_processed_file('questioner', split, small), 'wb') as f:
-        pickle.dump((np_features, np_input_seqs, np_output_seqs), f, protocol=4)
+        pickle.dump((np_features, np_input_seqs, np_output_seqs, np_seq_lens),
+                    f, protocol=4)
 
 if __name__ == '__main__':
     resnet_feature_extractor = ResnetFeatureExtractor()
