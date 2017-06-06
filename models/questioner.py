@@ -22,7 +22,7 @@ class QuestionerNet(nn.Module):
         self.encoder = nn.LSTM(
             input_size=RESNET_FEATURE_SIZE + token_embed_dim,
             hidden_size=vocab_size,
-            num_layers=1,
+            num_layers=2,
             batch_first=True
         )
         
@@ -53,8 +53,12 @@ class QuestionerNet(nn.Module):
         log_probs_flat = F.log_softmax(logits_flat)
         losses_flat = -torch.gather(log_probs_flat, dim=1, index=out_seq_flat)
         
-        losses = losses_flat.view(*out_seq.size())
+        losses = losses_flat.view(*out_seq.size()) * seq_mask
         loss = losses.sum() / seq_mask.sum()
+        
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
         
         return loss
         
