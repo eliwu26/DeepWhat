@@ -19,7 +19,7 @@ if __name__ == '__main__':
             example = json.loads(line)
             for qa in example['qas']:
                 question = qa['question']
-                counts.update(vocab.get_tokens(question))
+                counts.update(vocab.tokenize(question))
                 
     vocab = ['<start>', '<unk>', '<?>', '<stop>']
     
