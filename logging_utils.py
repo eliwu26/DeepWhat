@@ -1,4 +1,7 @@
-from tqdm import tqdm 
+from tqdm import tqdm
+
+import data
+
 
 def start_log(filename):
     with open(data.get_log_file(filename), 'w') as f:

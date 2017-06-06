@@ -11,7 +11,7 @@ from resnet_feature_extractor import ResnetFeatureExtractor
 
 def make_padded_ndarray(seqs):
     max_len = max(map(len, seqs))
-    result = np.zeros([len(seqs), max_len])
+    result = np.zeros([len(seqs), max_len], dtype=int)
     for i, seq in enumerate(seqs):
         result[i, :len(seq)] = seq
     return result
@@ -58,10 +58,9 @@ def make_dataset(split, small=False):
     np_features = np.array(data_features)
     np_input_seqs = make_padded_ndarray(data_input_seqs)
     np_output_seqs = make_padded_ndarray(data_output_seqs)
-    np_seq_lens = np.array(data_seq_lens)
     
     with open(data.get_processed_file('questioner', split, small), 'wb') as f:
-        pickle.dump((np_features, np_input_seqs, np_output_seqs, np_seq_lens),
+        pickle.dump((np_features, np_input_seqs, np_output_seqs, data_seq_lens),
                     f, protocol=4)
 
 if __name__ == '__main__':
