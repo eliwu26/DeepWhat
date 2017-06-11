@@ -13,7 +13,7 @@ vocab_size = vocab_map.vocab_size
 RESNET_FEATURE_SIZE = 2048
 
 class QuestionerNet(nn.Module):
-    def __init__(self, vocab_size=vocab_size, token_embed_dim=64):
+    def __init__(self, vocab_size=vocab_size, token_embed_dim=64, hidden_size=256):
         super(QuestionerNet, self).__init__()
         
         self.token_embedding = nn.Embedding(
@@ -23,9 +23,15 @@ class QuestionerNet(nn.Module):
         
         self.encoder = nn.LSTM(
             input_size=RESNET_FEATURE_SIZE + token_embed_dim,
-            hidden_size=vocab_size,
+            hidden_size=hidden_size,
             num_layers=1,
             batch_first=True
+        )
+        
+        self.mlp = nn.Sequential(
+            nn.Linear(hidden_size, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, vocab_size)
         )
         
         self.optimizer = torch.optim.Adam(self.parameters())
@@ -39,7 +45,12 @@ class QuestionerNet(nn.Module):
         
         encoder_inputs = torch.cat([in_embed, features_repeated], 2)
         
-        logits, h_n = self.encoder(encoder_inputs, h_0)
+        output, h_n = self.encoder(encoder_inputs, h_0)
+        
+        output_flat = output.contiguous().view(-1, output.size(-1))
+        logits_flat = self.mlp(output_flat)
+        logits = logits_flat.view(-1, in_seq.size(1), vocab_size)
+        
         return logits, h_n
         
     def sample(self, features, h_0=None, x_0=None, mode='greedy'):
@@ -63,10 +74,8 @@ class QuestionerNet(nn.Module):
         while True:
             logits, h = self(features, x, h_0=h)
             probs = F.softmax(logits.view(-1, logits.size(-1)))
-            # print(logits.size())
-            # print(probs.size())
             prob, x = torch.max(probs, dim=1)
-            print(prob)
+            # print(prob)
             
             token_id = int(x.data.cpu().numpy().squeeze())
             utterance.append(token_id)
@@ -75,16 +84,11 @@ class QuestionerNet(nn.Module):
     
     def train_step(self, features, in_seq, out_seq, seq_mask):
         logits, h_n = self(features, in_seq)
-        # print(logits.max(dim=-1)[1][0, :3, :])
-        #print(logits)
         
         # see: https://github.com/pytorch/pytorch/issues/764
         # and https://gist.github.com/jihunchoi/f1434a77df9db1bb337417854b398df1
         logits_flat = logits.contiguous().view(-1, logits.size(-1))
-        #print(logits_flat)
         out_seq_flat = out_seq.view(-1, 1)
-        #print(out_seq)
-        #print(out_seq_flat)
         
         log_probs_flat = F.log_softmax(logits_flat)
         losses_flat = -torch.gather(log_probs_flat, dim=1, index=out_seq_flat)

@@ -7,7 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
 
 from logging_utils import start_log, log_print
-from models.questioner2 import QuestionerNet
+from models.questioner import QuestionerNet
 import data
 
 
@@ -53,7 +53,7 @@ def get_data_loader(split, small):
         num_workers=1
     )
 
-def train(model, descriptor, loader_train, num_epochs, print_every=10):
+def train(model, descriptor, loader_train, num_epochs, print_every=100):
     for epoch in range(num_epochs):
         tqdm.write('Starting epoch {} / {}'.format(epoch + 1, num_epochs))
         model.train()
@@ -73,14 +73,14 @@ def train(model, descriptor, loader_train, num_epochs, print_every=10):
         torch.save(model.state_dict(), data.get_saved_model(descriptor))
 
 def main():
-    file_descriptor = 'questioner2'
+    file_descriptor = 'questioner_lstm1_fc2'
     small = False
     loader_train = get_data_loader('train', small)
     # loader_valid = get_data_loader('valid', small)
     # loader_test = get_data_loader('test', small)
 
     questioner_net = QuestionerNet().cuda()
-    train(questioner_net, file_descriptor, loader_train, num_epochs=25)
+    train(questioner_net, file_descriptor, loader_train, num_epochs=10)
 
 if __name__ == '__main__':
     main()
