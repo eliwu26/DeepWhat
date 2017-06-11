@@ -1,3 +1,4 @@
+import numpy as np
 from PIL import Image
 
 
@@ -16,4 +17,5 @@ def img_from_path(img_path):
     img = Image.open(img_path)
     if img.mode != 'RGB':
         img = img.convert('RGB')
+    img.load()
     return img
