@@ -47,13 +47,18 @@ class OracleLiteNet(nn.Module):
         self.loss_fn = nn.CrossEntropyLoss()
         
     def forward(self, tokens, question_lens, features, categories):
+        '''
+        tokens: [batch_size, max_len]
+        question_lens: [batch_size]
+        features: [batch_size, RESNET_FEATURE_SIZE + SPATIAL_SIZE == 2056]
+        categories: [batch_size]
+        '''
         embed_tokens = self.token_embedding(tokens)
         output, h_n = self.question_encoder(embed_tokens)
         gather_index = (question_lens-1).repeat(self.question_hidden_dim, 1, 1).transpose(0, 2)
-        question_encodings = output.gather(dim=1, index=gather_index).squeeze()
+        question_encodings = output.gather(dim=1, index=gather_index).squeeze(1)
         
         embed_category = self.category_embedding(categories)
-
         fc_in = torch.cat([question_encodings, features, embed_category], 1)
         
         return self.mlp(fc_in)
