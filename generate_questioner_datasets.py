@@ -68,6 +68,5 @@ if __name__ == '__main__':
     vocab_tagger = VocabTagger()
     
     for small in (True, False):
-        for split in ('train', 'valid', 'test'):
-            print('================== {}, small = {} =================='.format(split, small))
-            make_dataset(split, small)
+        print('================== {}, small = {} =================='.format(split, small))
+        make_dataset('train', small)
