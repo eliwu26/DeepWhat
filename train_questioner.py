@@ -70,6 +70,7 @@ def train(model, descriptor, loader_train, num_epochs, print_every=10):
             
             if t % print_every == 0:
                 log_print(descriptor, 't = {}, loss = {:.4}'.format(t + 1, loss.data[0]))
+        torch.save(model.state_dict(), data.get_saved_model(descriptor))
 
 def main():
     file_descriptor = 'questioner2'
