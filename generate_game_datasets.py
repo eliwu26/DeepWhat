@@ -40,7 +40,7 @@ def make_dataset(split, small=False):
                     f, protocol=4)
 
 if __name__ == '__main__':    
-    for small in (True,):
-        for split in ('valid', 'test'):
+    for small in (True, False):
+        for split in ('train', 'valid', 'test'):
                 print('================== {}, small = {} =================='.format(split, small))
                 make_dataset(split, small)
