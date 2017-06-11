@@ -2,9 +2,9 @@ import pickle
 import json
 
 import numpy as np
-from PIL import Image
 
 import data
+import data_utils
 from vocab import VocabTagger
 from resnet_feature_extractor import ResnetFeatureExtractor
 
@@ -32,10 +32,9 @@ def make_dataset(split, small=False):
                     break
             
             example = json.loads(line)
+            
             img_path = data.get_coco_file(example['image']['file_name'])
-            img = Image.open(img_path)
-            if img.mode != 'RGB':
-                img = img.convert('RGB')
+            img = data_utils.img_from_path(img_path)
             
             input_seq = [vocab_tagger.vocab_map.start]
             output_seq = []

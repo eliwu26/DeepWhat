@@ -2,23 +2,12 @@ import pickle
 import json
 
 import numpy as np
-from PIL import Image
 
 import data
+import data_utils
 from vocab import VocabTagger
 from resnet_feature_extractor import ResnetFeatureExtractor
 
-# add functions to get processed features here
-def get_spatial_features(example, obj):
-    img_width, img_height = example['image']['width'], example['image']['height']
-    
-    x, y, bbox_width, bbox_height = obj['bbox']
-    x = 2 * (x / img_width) - 1
-    y = 2 * (y / img_height) - 1
-    bbox_width = 2 * bbox_width / img_width
-    bbox_height = 2 * bbox_height / img_height
-
-    return [x, y, x + bbox_width, y + bbox_height, x + bbox_width / 2, y + bbox_width / 2, bbox_width, bbox_height]
 
 def make_dataset(split, small=False):
     data_tokens = []
@@ -41,9 +30,7 @@ def make_dataset(split, small=False):
             obj = [o for o in example['objects'] if o['id'] == object_id][0]
             
             img_path = data.get_coco_file(example['image']['file_name'])
-            img = Image.open(img_path)
-            if img.mode != 'RGB':
-                img = img.convert('RGB')
+            img = data_utils.img_from_path(img_path)
             
             x, y, bbox_width, bbox_height = obj['bbox']
             area = map(int, [x, y, x + bbox_width, y + bbox_height])
@@ -52,7 +39,7 @@ def make_dataset(split, small=False):
             features = np.concatenate([
                 resnet_feature_extractor.get_image_features(img),
                 resnet_feature_extractor.get_image_features(img_crop),
-                get_spatial_features(example, obj)
+                data_utils.get_spatial_features(example, obj)
             ])
             
             for qa in example['qas']:
