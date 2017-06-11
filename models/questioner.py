@@ -74,8 +74,13 @@ class QuestionerNet(nn.Module):
         while True:
             logits, h = self(features, x, h_0=h)
             probs = F.softmax(logits.view(-1, logits.size(-1)))
-            prob, x = torch.max(probs, dim=1)
-            # print(prob)
+            
+            if mode == 'greedy':
+                prob, x = torch.max(probs, dim=1)
+                # print(prob)
+            elif mode == 'sample':
+                x = torch.multinomial(probs)
+                print(x.size())
             
             token_id = int(x.data.cpu().numpy().squeeze())
             utterance.append(token_id)

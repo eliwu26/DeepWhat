@@ -80,7 +80,7 @@ def main():
     # loader_test = get_data_loader('test', small)
 
     questioner_net = QuestionerNet().cuda()
-    train(questioner_net, file_descriptor, loader_train, num_epochs=10)
+    train(questioner_net, file_descriptor, loader_train, num_epochs=20)
 
 if __name__ == '__main__':
     main()
