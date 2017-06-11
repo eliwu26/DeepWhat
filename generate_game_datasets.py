@@ -5,13 +5,12 @@ import numpy as np
 
 import data
 import data_utils
-from resnet_feature_extractor import ResnetFeatureExtractor
 
 
-def make_dataset(split):
+def make_dataset(split, small=False):
+    data_imgs = []
     data_all_spatial = []
     data_all_cats = []
-    data_img_feats = []
     
     i = 0
     with open(data.get_gw_file(split), 'r') as f:
@@ -19,6 +18,8 @@ def make_dataset(split):
             i += 1
             if i % 1000 == 0:
                 print(i)
+                if small and i == 1000:
+                    break
             
             example = json.loads(line)
             
@@ -28,16 +29,16 @@ def make_dataset(split):
             img_path = data.get_coco_file(example['image']['file_name'])
             img = data_utils.img_from_path(img_path)
             
+            data_imgs.append(img)
             data_all_cats.append(all_cats)
             data_all_spatial.append(all_spatial)
-            data_img_feats.append(resnet_feature_extractor.get_image_features(img))
     
     with open(data.get_processed_file('game', split, small), 'wb') as f:
-        pickle.dump((data_all_cats, data_all_spatial, data_img_feats), f, protocol=4)
+        pickle.dump((data_imgs, data_all_cats, data_all_spatial),
+                    f, protocol=4)
 
 if __name__ == '__main__':    
-    resnet_feature_extractor = ResnetFeatureExtractor()
-    
-    for split in ('valid', 'test'):
-            print('================== {} =================='.format(split))
-            make_dataset(split)
+    for small in (True,):
+        for split in ('valid', 'test'):
+                print('================== {}, small = {} =================='.format(split, small))
+                make_dataset(split, small)
