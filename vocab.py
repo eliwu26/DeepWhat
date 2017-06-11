@@ -39,10 +39,17 @@ class VocabTagger(object):
         elif answer == 'N/A':
             return self.vocab_map.na
         else:
-            raise ValueError()
+            raise ValueError('invalid answer')
             
     def get_answer(self, answer_id):
-        return self.vocab_map.get_token_from_id(answer_id)
+        if answer_id == self.vocab_map.yes:
+            return 'Yes'
+        elif answer_id == self.vocab_map.no:
+            return 'No'
+        elif answer_id == self.vocab_map.na:
+            return 'N/A'
+        else:
+            raise ValueError('invalid answer ID')
     
     def get_question_ids(self, question_tokens, qmark=False):
         ids = [self.vocab_map.get_id_from_token(token)
