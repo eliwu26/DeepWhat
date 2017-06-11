@@ -13,7 +13,7 @@ vocab_size = vocab_map.vocab_size
 RESNET_FEATURE_SIZE = 2048
 
 class QuestionerNet(nn.Module):
-    def __init__(self, vocab_size=vocab_size, token_embed_dim=64):
+    def __init__(self, vocab_size=vocab_size, token_embed_dim=64, hidden_size=256):
         super(QuestionerNet, self).__init__()
         
         self.token_embedding = nn.Embedding(
@@ -23,9 +23,15 @@ class QuestionerNet(nn.Module):
         
         self.encoder = nn.LSTM(
             input_size=RESNET_FEATURE_SIZE + token_embed_dim,
-            hidden_size=vocab_size,
+            hidden_size=hidden_size,
             num_layers=1,
             batch_first=True
+        )
+        
+        self.mlp = nn.Sequential(
+            nn.Linear(hidden_size, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, vocab_size)
         )
         
         self.optimizer = torch.optim.Adam(self.parameters())
@@ -39,7 +45,12 @@ class QuestionerNet(nn.Module):
         
         encoder_inputs = torch.cat([in_embed, features_repeated], 2)
         
-        logits, h_n = self.encoder(encoder_inputs, h_0)
+        output, h_n = self.encoder(encoder_inputs, h_0)
+        
+        output_flat = output.contiguous().view(-1, output.size(-1))
+        logits_flat = self.mlp(output_flat)
+        logits = logits_flat.view(-1, in_seq.size(1), vocab_size)
+        
         return logits, h_n
         
     def sample(self, features, h_0=None, x_0=None, mode='greedy'):

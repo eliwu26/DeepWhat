@@ -7,7 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
 
 from logging_utils import start_log, log_print
-from models.questioner import QuestionerNet
+from models.questioner2 import QuestionerNet
 import data
 
 
@@ -65,14 +65,14 @@ def train(model, descriptor, loader_train, num_epochs, print_every=10):
             seq_masks_var = Variable(seq_masks.cuda(), requires_grad=False)
             
             loss = model.train_step(
-                features_var, in_seqs_var, out_seqs_var, seq_masks_var
+                features_var[:2], in_seqs_var[:2], out_seqs_var[:2], seq_masks_var[:2]
             )
             
             if t % print_every == 0:
                 log_print(descriptor, 't = {}, loss = {:.4}'.format(t + 1, loss.data[0]))
 
 def main():
-    file_descriptor = 'questioner'
+    file_descriptor = 'questioner2'
     small = False
     loader_train = get_data_loader('train', small)
     # loader_valid = get_data_loader('valid', small)
