@@ -48,6 +48,12 @@ class GuesserNet(nn.Module):
         self.loss_fn = nn.CrossEntropyLoss()
         
     def forward(self, dialogues, dialogue_lens, all_cats, all_spatial):
+        '''
+        dialogues: [batch_size, max_len]
+        dialogue_lens: list[int] of len batch_size
+        all_cats: [batch_size, num_objs]
+        all_spatial: [batch_size, num_objs, SPATIAL_SIZE == 8]
+        '''
         embed_dialogue_padded = self.token_embedding(dialogues)
         embed_dialogue_packed = nn.utils.rnn.pack_padded_sequence(
             embed_dialogue_padded, dialogue_lens, batch_first=True

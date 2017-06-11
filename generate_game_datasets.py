@@ -9,6 +9,7 @@ import data_utils
 
 def make_dataset(split, small=False):
     data_imgs = []
+    data_raw_objs = []
     data_all_spatial = []
     data_all_cats = []
     
@@ -30,11 +31,12 @@ def make_dataset(split, small=False):
             img = data_utils.img_from_path(img_path)
             
             data_imgs.append(img)
+            data_raw_objs.append(example['objects'])
             data_all_cats.append(all_cats)
             data_all_spatial.append(all_spatial)
     
     with open(data.get_processed_file('game', split, small), 'wb') as f:
-        pickle.dump((data_imgs, data_all_cats, data_all_spatial),
+        pickle.dump((data_imgs, data_raw_objs, data_all_cats, data_all_spatial),
                     f, protocol=4)
 
 if __name__ == '__main__':    

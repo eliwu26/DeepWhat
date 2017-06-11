@@ -40,6 +40,9 @@ class VocabTagger(object):
             return self.vocab_map.na
         else:
             raise ValueError()
+            
+    def get_answer(self, answer_id):
+        return self.vocab_map.get_token_from_id(answer_id)
     
     def get_question_ids(self, question_tokens, qmark=False):
         ids = [self.vocab_map.get_id_from_token(token)

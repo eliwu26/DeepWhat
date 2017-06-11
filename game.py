@@ -52,19 +52,26 @@ class GuessWhatGame(object):
             self.obj_spatial[:, self.correct_obj, :]
         ], 1)
         
+        self.reset_state()
+        
+    def reset_state(self):
         self.questioner_h = None
         self.num_questions = 0
+        self.dialogue = []
         
     def question(self, answer=None, mode='sample'):
         if answer is not None:
             answer_id = vocab_tagger.get_answer_id(answer) if answer is not None else None
-            answer = Variable(torch.LongTensor(answer_id).unsqueeze(0).cuda(), volatile=True)
+            answer = Variable(torch.LongTensor([answer_id]).unsqueeze(0).cuda(), volatile=True)
         
         question_ids, self.questioner_h = questioner_net.sample(
             self.img_features,
             h_0=self.questioner_h,
             x_0=answer,
             mode=mode)
+        
+        self.num_questions += 1
+        self.dialogue.extend(question_ids)
         
         return question_ids
     
@@ -81,4 +88,18 @@ class GuessWhatGame(object):
         _, pred = scores.data.cpu().max(1)
         
         answer_idx = pred.squeeze().numpy()[0]
-        return data.get_answer_from_idx(answer_idx)
+        answer = data.get_answer_from_idx(answer_idx)
+        answer_id = vocab_tagger.get_answer_id(answer)
+        
+        self.dialogue.append(answer_id)
+        
+        return answer_id
+    
+    def guess(self):
+        dialogue_var = Variable(torch.LongTensor(self.dialogue).unsqueeze(0).cuda(), volatile=True)
+        dialogue_len = [len(self.dialogue)]
+        
+        scores = guesser_net(dialogue_var, dialogue_len, self.obj_cats, self.obj_spatial)
+        _, pred = scores.data.cpu().max(1)
+        
+        return pred.squeeze().numpy()[0]

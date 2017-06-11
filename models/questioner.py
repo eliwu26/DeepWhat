@@ -80,6 +80,8 @@ class QuestionerNet(nn.Module):
                 # print(prob)
             elif mode == 'sample':
                 x = torch.multinomial(probs)
+            else:
+                raise ValueError('Invalid questioner sampling mode')
             
             token_id = int(x.data.cpu().numpy().squeeze())
             utterance.append(token_id)
