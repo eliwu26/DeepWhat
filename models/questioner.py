@@ -80,7 +80,6 @@ class QuestionerNet(nn.Module):
                 # print(prob)
             elif mode == 'sample':
                 x = torch.multinomial(probs)
-                print(x.size())
             
             token_id = int(x.data.cpu().numpy().squeeze())
             utterance.append(token_id)
