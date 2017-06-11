@@ -53,7 +53,7 @@ def make_dataset(split, small=False):
                 data_question_lengths.append(len_tokens)
                 data_features.append(features)
                 data_categories.append(obj['category_id'])
-                data_answers.append(data.get_answer_id(qa['answer']))
+                data_answers.append(data.get_answer_idx(qa['answer']))
         
     np_tokens = np.vstack(data_tokens)
     np_question_lengths = np.array(data_question_lengths, dtype=int)

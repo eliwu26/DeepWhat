@@ -38,7 +38,7 @@ def get_processed_file(model, split, small):
 def get_coco_file(filename):
     return os.path.join(COCO_DIR, filename)
 
-def get_answer_id(answer):
+def get_answer_idx(answer):
     if answer == 'Yes':
         return 0
     elif answer == 'No':
@@ -47,3 +47,13 @@ def get_answer_id(answer):
         return 2
     else:
         raise ValueError('invalid answer')
+        
+def get_answer_from_idx(answer_idx):
+    if answer_idx == 0:
+        return 'Yes'
+    elif answer_idx == 1:
+        return 'No'
+    elif answer_idx == 2:
+        return 'N/A'
+    else:
+        raise ValueError('invalid answer idx')
