@@ -60,3 +60,4 @@ for split in ('train', 'valid'):
             num_correct += play_game(i, seen_obj)
 
         log_print(descriptor, 'Accuracy: {} / {} = {}'.format(num_correct, num_total, num_correct / num_total))
+    
