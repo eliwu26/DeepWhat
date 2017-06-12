@@ -3,7 +3,7 @@ import random
 
 import data
 from vocab import VocabTagger
-from game import GuessWhatGame
+from game import GuessWhatGame, GuessWhatAgents
 
 
 def get_example(i):
@@ -15,7 +15,7 @@ def play_game(i):
     num_objs = len(obj_cats)
     correct_obj = random.randint(0, num_objs - 1)
     
-    game = GuessWhatGame(img, obj_cats, obj_spatial)
+    game = GuessWhatGame(agents, img, obj_cats, obj_spatial)
     
     answer = None
     for i in range(20):
@@ -31,6 +31,7 @@ def play_game(i):
     return pred_idx == correct_obj
 
 vocab_tagger = VocabTagger()
+agents = GuessWhatAgents()
 small = True
 
 for split in ('train', 'valid'):
