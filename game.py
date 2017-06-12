@@ -3,8 +3,10 @@ import random
 import numpy as np
 import torch
 from torch.autograd import Variable
+from PIL import Image
 
 import data
+import data_utils
 from resnet_feature_extractor import ResnetFeatureExtractor
 from vocab import VocabTagger
 from models.questioner import QuestionerNet
@@ -30,7 +32,7 @@ class GuessWhatAgents(object):
         
 
 class GuessWhatGame(object):
-    def __init__(self, agents, img, obj_cats, obj_spatial, correct_obj=None,
+    def __init__(self, agents, img_name, obj_cats, obj_spatial, correct_obj=None,
                  kwargs={'volatile': True}):
         '''
         kwargs: {'volatile': True} when evaluating,
@@ -47,7 +49,9 @@ class GuessWhatGame(object):
 
         assert 0 <= correct_obj < len(obj_cats)
         
-        self.img = img
+        img_path = data.get_coco_file(img_name)
+        img = data_utils.img_from_path(img_path)
+        
         self.img_features = Variable(torch.from_numpy(
             self.agents.resnet_feature_extractor.get_image_features(img)
         ).unsqueeze(0).cuda(), **self.kwargs)
