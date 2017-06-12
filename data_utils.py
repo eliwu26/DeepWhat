@@ -13,10 +13,9 @@ def get_spatial_features(example, obj):
 
     return (x, y, x + bbox_width, y + bbox_height, x + bbox_width / 2, y + bbox_width / 2, bbox_width, bbox_height)
 
-# TODO fix memory leak
 def img_from_path(img_path):
     img = Image.open(img_path)
     if img.mode != 'RGB':
         img = img.convert('RGB')
     img.load()
-    return img
+    return np.array(img)

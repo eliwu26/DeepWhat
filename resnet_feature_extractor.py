@@ -2,6 +2,7 @@ import torch
 from torch.autograd import Variable
 import torch.nn as nn
 from torchvision import models, transforms
+from PIL import Image
 
 
 class ResnetFeatureExtractor(object):
@@ -22,6 +23,7 @@ class ResnetFeatureExtractor(object):
         ])
         
     def get_image_features(self, img):
+        img = Image.fromarray(img)
         img_tensor = self.preprocess(img).type(torch.cuda.FloatTensor)
         img_tensor.unsqueeze_(0)
         img_variable = Variable(img_tensor)
