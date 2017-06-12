@@ -98,7 +98,7 @@ for i in tqdm(range(len(data_img_names))):
     
     baseline = BASELINE_ALPHA * reward + (1 - BASELINE_ALPHA) * baseline
 
-    if i % 50 == 0:
+    if (i + 1) % 50 == 0:
         break
 
 torch.save(agents.questioner_net.state_dict(), data.get_saved_model(descriptor))

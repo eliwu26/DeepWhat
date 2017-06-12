@@ -24,7 +24,7 @@ def play_game(i, seen_obj):
     
     answer = None
     for i in range(10):
-        question_ids = game.question(answer, mode='greedy')
+        question_ids = game.question(answer, mode='sample')
         if question_ids[0] == vocab_tagger.vocab_map.stop:
             break
 
@@ -35,10 +35,10 @@ def play_game(i, seen_obj):
     
     return pred_idx == correct_obj
 
-descriptor = 'eval_questioner_lstm1_fc2_greedy'
+descriptor = 'eval_questioner_reinforce_lstm1_fc2_sample'
 
 vocab_tagger = VocabTagger()
-agents = GuessWhatAgents()
+agents = GuessWhatAgents(questioner='questioner_reinforce_lstm1_fc2')
 small = True
 
 for split in ('train', 'valid'):

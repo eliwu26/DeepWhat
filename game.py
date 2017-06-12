@@ -16,7 +16,7 @@ from models.guesser import GuesserNet
 vocab_tagger = VocabTagger()
 
 class GuessWhatAgents(object):
-    def __init__(self):
+    def __init__(self, questioner='questioner_lstm1_fc2'):
         self.resnet_feature_extractor = ResnetFeatureExtractor()
 
         self.questioner_net = QuestionerNet().cuda()
@@ -28,7 +28,7 @@ class GuessWhatAgents(object):
         self.guesser_net.load_state_dict(
             torch.load(data.get_saved_model('guesser_gru2_fc2_cat16_h256_we64')))
         self.questioner_net.load_state_dict(
-            torch.load(data.get_saved_model('questioner_lstm1_fc2')))
+            torch.load(data.get_saved_model(questioner)))
         
 
 class GuessWhatGame(object):
