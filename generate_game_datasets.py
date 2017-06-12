@@ -8,7 +8,7 @@ import data_utils
 
 
 def make_dataset(split, small=False):
-    data_imgs = []
+    data_img_names = []
     data_raw_objs = []
     data_all_spatial = []
     data_all_cats = []
@@ -28,14 +28,13 @@ def make_dataset(split, small=False):
             all_cats = [o['category_id'] for o in example['objects']]
             all_spatial = [data_utils.get_spatial_features(example, o) for o in example['objects']]
             
-            img_path = data.get_coco_file(example['image']['file_name'])
-            img = data_utils.img_from_path(img_path)
+            img_name = example['image']['file_name']
             
             correct_obj_id = example['object_id']
             correct_obj_idx = [i for i, o in enumerate(example['objects'])
                                if o['id'] == correct_obj_id][0]
             
-            data_imgs.append(img)
+            data_img_names.append(img_name)
             data_raw_objs.append(example['objects'])
             data_all_cats.append(all_cats)
             data_all_spatial.append(all_spatial)
@@ -43,7 +42,7 @@ def make_dataset(split, small=False):
     
     with open(data.get_processed_file('game', split, small), 'wb') as f:
         pickle.dump(
-            (data_imgs, data_raw_objs, data_all_cats, data_all_spatial, data_correct_obj),
+            (data_img_names, data_raw_objs, data_all_cats, data_all_spatial, data_correct_obj),
             f, protocol=4
         )
 

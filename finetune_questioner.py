@@ -3,14 +3,18 @@ import random
 
 import torch
 from torch.autograd import Variable
+from tqdm import tqdm
 
 import data
 from vocab import VocabTagger
+from logging_utils import start_log, log_print
 from game import GuessWhatAgents, GuessWhatGame
 
 
 BASELINE_ALPHA = 0.01
 REINFORCE_RATE = 0.001
+
+descriptor = 'questioner_reinforce_lstm1_fc2'
 
 class GuessWhatReinforceGame(GuessWhatGame):
     def question(self, answer=None, mode='sample'):
@@ -39,10 +43,10 @@ split = 'train'
 small = True
 
 with open(data.get_processed_file('game', split, small), 'rb') as f:
-    data_imgs, data_raw_objs, data_all_cats, data_all_spatial = pickle.load(f)
+    data_img_names, data_raw_objs, data_all_cats, data_all_spatial, data_correct_obj = pickle.load(f)
 
 def get_example(i):
-    return data_imgs[i], data_raw_objs[i], data_all_cats[i], data_all_spatial[i]
+    return data_img_names[i], data_raw_objs[i], data_all_cats[i], data_all_spatial[i], data_correct_obj[i]
 
 vocab_tagger = VocabTagger()
 agents = GuessWhatAgents()
@@ -50,12 +54,12 @@ baseline = 0
 
 optimizer = torch.optim.SGD(agents.questioner_net.parameters(), lr=REINFORCE_RATE)
 
-for i in range(len(data_imgs)):    
-    img, raw_objs, obj_cats, obj_spatial = get_example(i)
+for i in tqdm(range(len(data_img_names))):
+    img_name, raw_objs, obj_cats, obj_spatial = get_example(i)
     num_objs = len(obj_cats)
     correct_obj = random.randint(0, num_objs - 1)
     
-    game = GuessWhatReinforceGame(agents, img, obj_cats, obj_spatial,
+    game = GuessWhatReinforceGame(agents, img_name, obj_cats, obj_spatial,
                                   kwargs={'requires_grad': False})
     dialogue_probs = []
     dialogue_outputs = []
@@ -78,7 +82,7 @@ for i in range(len(data_imgs)):
     pred_idx = game.guess()
     reward = float(pred_idx == correct_obj)
     
-    print('i = {} | b = {} | r = {}'.format(i, baseline, reward))
+    log_print(descriptor, 'i = {} | b = {} | r = {}'.format(i, baseline, reward))
     
     dialogue_log_probs = torch.log(torch.cat(dialogue_probs))
     adjusted_reward = reward - baseline
@@ -93,3 +97,5 @@ for i in range(len(data_imgs)):
     optimizer.step()
     
     baseline = BASELINE_ALPHA * reward + (1 - BASELINE_ALPHA) * baseline
+
+torch.save(model.state_dict(), data.get_saved_model(descriptor))
