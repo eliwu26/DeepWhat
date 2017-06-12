@@ -30,8 +30,14 @@ class GuessWhatAgents(object):
         
 
 class GuessWhatGame(object):
-    def __init__(self, agents, img, obj_cats, obj_spatial, correct_obj=None):
+    def __init__(self, agents, img, obj_cats, obj_spatial, correct_obj=None,
+                 kwargs={'volatile': True}):
+        '''
+        kwargs: {'volatile': True} when evaluating,
+                {'requires_grad': False} in reinforcement learning setting
+        '''
         self.agents = agents
+        self.kwargs = kwargs
         
         assert len(obj_cats) == len(obj_spatial)
         self.num_objs = len(obj_cats)
@@ -44,10 +50,16 @@ class GuessWhatGame(object):
         self.img = img
         self.img_features = Variable(torch.from_numpy(
             self.agents.resnet_feature_extractor.get_image_features(img)
-        ).unsqueeze(0).cuda(), volatile=True)
+        ).unsqueeze(0).cuda(), **self.kwargs)
         
-        self.obj_cats = Variable(torch.LongTensor(obj_cats).unsqueeze(0).cuda(), volatile=True)
-        self.obj_spatial = Variable(torch.FloatTensor(obj_spatial).unsqueeze(0).cuda(), volatile=True)
+        self.obj_cats = Variable(
+            torch.LongTensor(obj_cats).unsqueeze(0).cuda(),
+            **self.kwargs
+        )
+        self.obj_spatial = Variable(
+            torch.FloatTensor(obj_spatial).unsqueeze(0).cuda(),
+            **self.kwargs
+        )
         
         self.correct_obj = correct_obj
         
@@ -66,7 +78,10 @@ class GuessWhatGame(object):
     def question(self, answer=None, mode='sample'):
         if answer is not None:
             answer_id = vocab_tagger.get_answer_id(answer) if answer is not None else None
-            answer = Variable(torch.LongTensor([answer_id]).unsqueeze(0).cuda(), volatile=True)
+            answer = Variable(
+                torch.LongTensor([answer_id]).unsqueeze(0).cuda(),
+                **self.kwargs
+            )
         
         question_ids, self.questioner_h = self.agents.questioner_net.sample(
             self.img_features,
@@ -86,8 +101,8 @@ class GuessWhatGame(object):
         question_ids = torch.LongTensor(question_ids).unsqueeze(0)
         q_lens = torch.LongTensor([question_len])
         
-        question_var = Variable(question_ids.cuda(), volatile=True)
-        question_len_var = Variable(q_lens.cuda(), volatile=True)
+        question_var = Variable(question_ids.cuda(), **self.kwargs)
+        question_len_var = Variable(q_lens.cuda(), **self.kwargs)
         
         scores = self.agents.oracle_net(question_var, question_len_var, self.oracle_features, cat_var)
         _, pred = scores.data.cpu().max(1)
@@ -101,7 +116,10 @@ class GuessWhatGame(object):
         return answer_id
     
     def guess(self):
-        dialogue_var = Variable(torch.LongTensor(self.dialogue).unsqueeze(0).cuda(), volatile=True)
+        dialogue_var = Variable(
+            torch.LongTensor(self.dialogue).unsqueeze(0).cuda(),
+            **self.kwargs
+        )
         dialogue_len = [len(self.dialogue)]
         
         scores = self.agents.guesser_net(dialogue_var, dialogue_len, self.obj_cats, self.obj_spatial)

@@ -53,7 +53,7 @@ class QuestionerNet(nn.Module):
         
         return logits, h_n
         
-    def sample(self, features, h_0=None, x_0=None, mode='greedy'):
+    def sample(self, features, h_0=None, x_0=None, mode='greedy', reinforce=False):
         '''
         Eval time sample
         
@@ -63,13 +63,19 @@ class QuestionerNet(nn.Module):
                  or None if we're starting a game
             x_0: token ID for <start> or the previous answer, <Yes>/<No>/<N/A>
             mode: 'greedy', 'random' for random sample, or 'beam' for beam search
+            reinforce: if True, returns probabilities for each output (used for REINFORCE
+                       fine-tuning), and uses requires_grad=False instead of volatile=True
         '''
+        kwargs = {'requires_grad': False} if reinforce else {'volatile': True}
+        
         utterance = []
+        output_probs = []
+        stochastic_outputs = []
         
         x, h = x_0, h_0
         
         if x is None:
-            x = Variable(torch.LongTensor([[vocab_map.start]]).cuda(), volatile=True)
+            x = Variable(torch.LongTensor([[vocab_map.start]]).cuda(), **kwargs)
         
         while True:
             logits, h = self(features, x, h_0=h)
@@ -84,9 +90,18 @@ class QuestionerNet(nn.Module):
                 raise ValueError('Invalid questioner sampling mode')
             
             token_id = int(x.data.cpu().numpy().squeeze())
+            
+            if reinforce:
+                assert probs.size(0) == 1 # RL only support batch size 1
+                output_probs.append(
+                    probs[0, token_id]
+                )
+                stochastic_outputs.append(x)
+            
             utterance.append(token_id)
+            
             if token_id == vocab_map.qmark or token_id == vocab_map.stop or len(utterance) >= data.MAX_TOKENS_PER_QUESTION:
-                return utterance, h
+                return (utterance, h, output_probs, stochastic_outputs) if reinforce else (utterance, h)
     
     def train_step(self, features, in_seq, out_seq, seq_mask):
         logits, h_n = self(features, in_seq)
