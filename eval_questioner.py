@@ -23,8 +23,8 @@ def play_game(i, seen_obj):
     game = GuessWhatGame(agents, img_name, obj_cats, obj_spatial)
     
     answer = None
-    for i in range(20):
-        question_ids = game.question(answer, mode='sample')
+    for i in range(10):
+        question_ids = game.question(answer, mode='greedy')
         if question_ids[0] == vocab_tagger.vocab_map.stop:
             break
 
@@ -35,7 +35,7 @@ def play_game(i, seen_obj):
     
     return pred_idx == correct_obj
 
-descriptor = 'eval_questioner_lstm1_fc2'
+descriptor = 'eval_questioner_lstm1_fc2_greedy'
 
 vocab_tagger = VocabTagger()
 agents = GuessWhatAgents()

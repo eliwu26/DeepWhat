@@ -55,7 +55,7 @@ baseline = 0
 optimizer = torch.optim.SGD(agents.questioner_net.parameters(), lr=REINFORCE_RATE)
 
 for i in tqdm(range(len(data_img_names))):
-    img_name, raw_objs, obj_cats, obj_spatial = get_example(i)
+    img_name, raw_objs, obj_cats, obj_spatial, correct_obj = get_example(i)
     num_objs = len(obj_cats)
     correct_obj = random.randint(0, num_objs - 1)
     
@@ -98,4 +98,4 @@ for i in tqdm(range(len(data_img_names))):
     
     baseline = BASELINE_ALPHA * reward + (1 - BASELINE_ALPHA) * baseline
 
-torch.save(model.state_dict(), data.get_saved_model(descriptor))
+torch.save(agents.questioner_net.state_dict(), data.get_saved_model(descriptor))

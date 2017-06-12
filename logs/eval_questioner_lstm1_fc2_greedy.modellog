@@ -1,0 +1,7 @@
+Playing game with images in: train | seen objects: True
+Playing game with images in: train | seen objects: True
+Accuracy: 261 / 999 = 0.26126126126126126
+Playing game with images in: train | seen objects: False
+Accuracy: 224 / 999 = 0.22422422422422422
+Playing game with images in: valid | seen objects: False
+Accuracy: 201 / 999 = 0.2012012012012012
