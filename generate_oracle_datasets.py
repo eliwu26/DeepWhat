@@ -2,6 +2,7 @@ import pickle
 import json
 
 import numpy as np
+from PIL import Image
 
 import data
 import data_utils
@@ -30,7 +31,7 @@ def make_dataset(split, small=False):
             obj = [o for o in example['objects'] if o['id'] == object_id][0]
             
             img_path = data.get_coco_file(example['image']['file_name'])
-            img = data_utils.img_from_path(img_path)
+            img = Image.fromarray(data_utils.img_from_path(img_path))
             
             x, y, bbox_width, bbox_height = obj['bbox']
             area = map(int, [x, y, x + bbox_width, y + bbox_height])
